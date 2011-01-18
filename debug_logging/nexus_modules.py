@@ -6,7 +6,7 @@ class DebugLoggingModule(nexus.NexusModule):
     name = 'debug-logging'
     
     def get_title(self):
-        return 'Django Debug Logging'
+        return 'Debug Logging'
     
     def get_urls(self):
         from django.conf.urls.defaults import patterns, url
@@ -19,7 +19,7 @@ class DebugLoggingModule(nexus.NexusModule):
     
     def render_on_dashboard(self, request):
         return self.render_to_string('nexus/debug_logging/dashboard.html', {
-            'title': 'Django Debug Logging',
+            'title': 'Debug Logging',
         })
     
     def index(self, request):
@@ -27,4 +27,4 @@ class DebugLoggingModule(nexus.NexusModule):
             'title': 'Django Debug Logging',
         }, request)
 
-nexus.site.register(HelloWorldModule, 'hello-world')
+nexus.site.register(DebugLoggingModule, 'debug-logging')
