@@ -251,7 +251,7 @@ class SQLDebugPanel(DebugPanel):
             if settings.DEBUG_LOGGING_CONFIG.get('SQL_EXTRA', False):
                 for query in self._queries:
                     query['sql'] = reformat_sql(query['sql'])
-                stats['aql_queries'] = pickle.dumps(self._queries)
+                stats['sql_queries'] = pickle.dumps(self._queries)
             
             stats['sql_time'] = self._sql_time
             stats['sql_num_queries'] = len(self._queries)
