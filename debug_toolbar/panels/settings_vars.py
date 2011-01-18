@@ -27,3 +27,10 @@ class SettingsVarsDebugPanel(DebugPanel):
             'settings': get_safe_settings(),
         })
         return render_to_string('debug_toolbar/panels/settings_vars.html', context)
+    
+    def process_response(self, request, response):
+        if getattr(settings, 'DEBUG_LOGGING_CONFIG', {}).get('ENABLED', False):
+            # Logging is enabled, so log the settings
+            stats = {}
+            stats['settings'] = get_safe_settings()
+            request.debug_logging_stats.update(stats)

@@ -1,6 +1,7 @@
 import time
 import inspect
 
+from django.conf import settings
 from django.core import cache
 from django.core.cache.backends.base import BaseCache
 from django.template.loader import render_to_string
@@ -103,3 +104,24 @@ class CacheDebugPanel(DebugPanel):
             'cache': self.cache,
         })
         return render_to_string('debug_toolbar/panels/cache.html', context)
+    
+    def process_response(self, request, response):
+        if getattr(settings, 'DEBUG_LOGGING_CONFIG', {}).get('ENABLED', False):
+            # Logging is enabled, so log the cache data
+            import pickle
+
+            stats = {}
+
+            stats['cache_num_calls'] = len(self.cache.calls)
+            stats['cache_time'] = self.cache.total_time
+            stats['cache_hits'] = self.cache.hits
+            stats['cache_misses'] = self.cache.misses
+            stats['cache_sets'] = self.cache.sets
+            stats['cache_gets'] = self.cache.gets
+            stats['cache_get_many'] = self.cache.get_many
+            stats['cache_deletes'] = self.cache.deletes
+            
+            if settings.DEBUG_LOGGING_CONFIG.get('CACHE_EXTRA', False):
+                stats['cache_calls'] = pickle.dumps(self.cache.calls)
+            
+            request.debug_logging_stats.update(stats)

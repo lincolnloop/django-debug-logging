@@ -3,6 +3,7 @@ try:
 except ImportError:
     pass # Will fail on Win32 systems
 import time
+from django.conf import settings
 from django.template.loader import render_to_string
 from django.utils.translation import ugettext_lazy as _
 from debug_toolbar.panels import DebugPanel
@@ -30,6 +31,14 @@ class TimerDebugPanel(DebugPanel):
         self.total_time = (time.time() - self._start_time) * 1000
         if self.has_resource:
             self._end_rusage = resource.getrusage(resource.RUSAGE_SELF)
+        
+        if getattr(settings, 'DEBUG_LOGGING_CONFIG', {}).get('ENABLED', False):
+            import pickle
+            rows = self.get_rows()
+            request.debug_logging_stats.update(
+                {'timer_stats': pickle.dumps(rows)}
+            )
+            
 
     def nav_title(self):
         return _('Time')
@@ -51,9 +60,8 @@ class TimerDebugPanel(DebugPanel):
 
     def _elapsed_ru(self, name):
         return getattr(self._end_rusage, name) - getattr(self._start_rusage, name)
-
-    def content(self):
-
+    
+    def get_rows(self):
         utime = 1000 * self._elapsed_ru('ru_utime')
         stime = 1000 * self._elapsed_ru('ru_stime')
         vcsw = self._elapsed_ru('ru_nvcsw')
@@ -84,10 +92,12 @@ class TimerDebugPanel(DebugPanel):
 #            ('Page faults', '%d no i/o, %d requiring i/o' % (minflt, majflt)),
 #            ('Disk operations', '%d in, %d out, %d swapout' % (blkin, blkout, swap)),
         )
+    
+    def content(self):
 
         context = self.context.copy()
         context.update({
-            'rows': rows,
+            'rows': self.get_rows(),
         })
 
         return render_to_string('debug_toolbar/panels/timer.html', context)

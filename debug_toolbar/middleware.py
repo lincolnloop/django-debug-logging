@@ -40,7 +40,13 @@ class DebugToolbarMiddleware(object):
 
         # The tag to attach the toolbar to
         self.tag= u'</body>'
-
+        
+        # Determine whether logging is enabled
+        self.logging_enabled = False
+        if hasattr(settings, 'DEBUG_LOGGING_CONFIG'):
+            if settings.DEBUG_LOGGING_CONFIG.get('ENABLED', False):
+                self.logging_enabled = True
+        
         if hasattr(settings, 'DEBUG_TOOLBAR_CONFIG'):
             show_toolbar_callback = settings.DEBUG_TOOLBAR_CONFIG.get(
                 'SHOW_TOOLBAR_CALLBACK', None)
@@ -52,6 +58,9 @@ class DebugToolbarMiddleware(object):
                 self.tag = u'</' + tag + u'>'
 
     def _show_toolbar(self, request):
+        if self.logging_enabled:
+            # If logging is enabled, don't show the toolbar
+            return False
         x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR', None)
         if x_forwarded_for:
             remote_addr = x_forwarded_for.split(',')[0].strip()
@@ -73,10 +82,15 @@ class DebugToolbarMiddleware(object):
                 )
                 self.override_url = False
             request.urlconf = 'debug_toolbar.urls'
-
+        
+        if self.logging_enabled:
+            request.debug_logging_stats = {}
+        
+        if self.show_toolbar(request) or self.logging_enabled:
             self.debug_toolbars[request] = DebugToolbar(request)
             for panel in self.debug_toolbars[request].panels:
                 panel.process_request(request)
+            
 
     def process_view(self, request, view_func, view_args, view_kwargs):
         if request in self.debug_toolbars:
@@ -106,5 +120,15 @@ class DebugToolbarMiddleware(object):
                     smart_unicode(self.debug_toolbars[request].render_toolbar() + self.tag))
             if response.get('Content-Length', None):
                 response['Content-Length'] = len(response.content)
+            if self.logging_enabled:
+                # If logging is enabled, log the stats to the selected handler
+                import logging
+                from debug_toolbar.log.handlers import DBHandler
+                
+                logger = logging.getLogger('debug.logger')
+                logger.setLevel(logging.DEBUG)
+                logger.addHandler(DBHandler())
+                
+                logger.debug(request.debug_logging_stats)
         del self.debug_toolbars[request]
         return response
