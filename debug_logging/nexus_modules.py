@@ -1,5 +1,7 @@
 import nexus
 
+from debug_logging.models import DebugLogRecord
+
 
 class DebugLoggingModule(nexus.NexusModule):
     home_url = 'index'
@@ -23,8 +25,10 @@ class DebugLoggingModule(nexus.NexusModule):
         })
     
     def index(self, request):
+        records = DebugLogRecord.objects.all()
+        
         return self.render_to_response("nexus/debug_logging/index.html", {
-            'title': 'Django Debug Logging',
+            'records': records,
         }, request)
 
 nexus.site.register(DebugLoggingModule, 'debug-logging')

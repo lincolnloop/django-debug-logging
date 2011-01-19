@@ -84,7 +84,9 @@ class DebugToolbarMiddleware(object):
             request.urlconf = 'debug_toolbar.urls'
         
         if self.logging_enabled:
-            request.debug_logging_stats = {}
+            # Add an attribute to the request to track stats, and log the
+            # request path
+            request.debug_logging_stats = {'request_path': request.path}
         
         if self.show_toolbar(request) or self.logging_enabled:
             self.debug_toolbars[request] = DebugToolbar(request)

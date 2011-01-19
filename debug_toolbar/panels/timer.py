@@ -33,11 +33,16 @@ class TimerDebugPanel(DebugPanel):
             self._end_rusage = resource.getrusage(resource.RUSAGE_SELF)
         
         if getattr(settings, 'DEBUG_LOGGING_CONFIG', {}).get('ENABLED', False):
-            import pickle
-            rows = self.get_rows()
-            request.debug_logging_stats.update(
-                {'timer_stats': pickle.dumps(rows)}
-            )
+            utime, stime, vcsw, ivcsw, minflt, majflt = self.get_stats()
+            stats = {
+                'timer_utime': utime,
+                'timer_stime': stime,
+                'timer_cputime': (utime + stime),
+                'timer_total': self.total_time,
+                'timer_vcsw': vcsw,
+                'timer_ivcsw': ivcsw,
+            }
+            request.debug_logging_stats.update(stats)
             
 
     def nav_title(self):
@@ -61,7 +66,7 @@ class TimerDebugPanel(DebugPanel):
     def _elapsed_ru(self, name):
         return getattr(self._end_rusage, name) - getattr(self._start_rusage, name)
     
-    def get_rows(self):
+    def get_stats(self):
         utime = 1000 * self._elapsed_ru('ru_utime')
         stime = 1000 * self._elapsed_ru('ru_stime')
         vcsw = self._elapsed_ru('ru_nvcsw')
@@ -80,7 +85,12 @@ class TimerDebugPanel(DebugPanel):
 #        srss = self._end_rusage.ru_ixrss
 #        urss = self._end_rusage.ru_idrss
 #        usrss = self._end_rusage.ru_isrss
-
+        
+        return utime, stime, vcsw, ivcsw, minflt, majflt
+    
+    def content(self):
+        utime, stime, vcsw, ivcsw, minflt, majflt = self.get_stats()
+        
         # TODO l10n on values
         rows = (
             (_('User CPU time'), '%0.3f msec' % utime),
@@ -92,12 +102,10 @@ class TimerDebugPanel(DebugPanel):
 #            ('Page faults', '%d no i/o, %d requiring i/o' % (minflt, majflt)),
 #            ('Disk operations', '%d in, %d out, %d swapout' % (blkin, blkout, swap)),
         )
-    
-    def content(self):
 
         context = self.context.copy()
         context.update({
-            'rows': self.get_rows(),
+            'rows': rows,
         })
 
         return render_to_string('debug_toolbar/panels/timer.html', context)

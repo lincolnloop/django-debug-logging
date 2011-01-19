@@ -1,6 +1,6 @@
 import logging
 
-from debug_toolbar.models import DebugLogRecord
+from debug_logging.models import DebugLogRecord
 
 
 class DBHandler(logging.Handler):

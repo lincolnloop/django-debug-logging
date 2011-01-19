@@ -1,7 +1,28 @@
-{% extends "nexus/module.html" %}
+{% extends "nexus/debug_logging/base.html" %}
 
 {% block content %}
-    <h2>{{ title }}</h2>
-
-    <p>Welcome to the Django Debug Logging interface!</p>
+    <div id="changelist" class="module">
+      <table cellspacing="0">
+        <thead>
+          <tr>
+            <th>Request Path</th>
+            <th>Timestamp</th>
+            <th>Response Time</th>
+            <th>SQL Queries</th>
+            <th>Cache Hits</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for record in records %}
+          <tr>
+            <td>{{ record.request_path }}</td>
+            <td>{{ record.timestamp }}</td>
+            <td>{{ record.timer_total|floatformat:"0.3" }} ms</td>
+            <td>{{ record.sql_num_queries }}</td>
+            <td>{{ record.cache_hits }}</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
 {% endblock %}
