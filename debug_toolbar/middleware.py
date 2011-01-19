@@ -2,6 +2,7 @@
 Debug Toolbar middleware
 """
 import os
+import logging
 
 from django.conf import settings
 from django.http import HttpResponseRedirect
@@ -10,7 +11,12 @@ from django.utils.encoding import smart_unicode
 from django.conf.urls.defaults import include, patterns
 
 import debug_toolbar.urls
+from debug_toolbar.log.handlers import DBHandler
 from debug_toolbar.toolbar.loader import DebugToolbar
+
+logger = logging.getLogger('debug.logger')
+logger.setLevel(logging.DEBUG)
+logger.addHandler(DBHandler())
 
 _HTML_TYPES = ('text/html', 'application/xhtml+xml')
 
@@ -123,14 +129,7 @@ class DebugToolbarMiddleware(object):
             if response.get('Content-Length', None):
                 response['Content-Length'] = len(response.content)
             if self.logging_enabled:
-                # If logging is enabled, log the stats to the selected handler
-                import logging
-                from debug_toolbar.log.handlers import DBHandler
-                
-                logger = logging.getLogger('debug.logger')
-                logger.setLevel(logging.DEBUG)
-                logger.addHandler(DBHandler())
-                
+                # If logging is enabled, log the stats to the selected handler                
                 logger.debug(request.debug_logging_stats)
         del self.debug_toolbars[request]
         return response

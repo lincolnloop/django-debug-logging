@@ -5,10 +5,8 @@ from debug_logging.models import DebugLogRecord
 
 class DBHandler(logging.Handler):
     
-    def __init__(self, *args, **kwargs):
-        super(DBHandler, self).__init__(*args, **kwargs)
-    
     def emit(self, record):
+        print '########################## Called'
         if type(record.msg) is dict:
             instance = DebugLogRecord(**record.msg)
             instance.save()

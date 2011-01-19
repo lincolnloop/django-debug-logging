@@ -1,0 +1,31 @@
+<li class="row1 priority-low {{ record_class }}" id="group_1">
+    <span class="count count-digits-4">
+      {{ record.timer_total|floatformat:"0.3" }} ms
+    </span>
+    <h3>
+      {% if not record_class %}
+        <a href="{% url debug-logging:record_detail record.id %}">
+          {{ record.request_path}}
+        </a>
+      {% else %}
+        {{ record.request_path}}
+      {% endif %}
+    </h3>
+    <span class="last_seen">
+      {{ record.timestamp|date:"M dS, g:m:s a" }}
+    </span>
+    <p class="message">
+        <span class="tag">
+          CPU user {{ record.timer_utime|floatformat:"0.3" }} ms / system {{ record.timer_stime|floatformat:"0.3" }} ms
+        </span>
+        <span class="tag">
+          {{ record.sql_num_queries }} SQL queries in {{ record.sql_time|floatformat:"0.3" }} ms
+        </span> 
+        <span class="tag">
+          {{ record.cache_hits }} cache hits / {{ record.cache_misses }} misses in {{ record.cache_time|floatformat:"0.3" }} ms
+        </span>
+    </p>
+    {% if not record_class %}
+      <a href="{% url debug-logging:record_detail record.id %}" class="row_link"></a>
+    {% endif %}
+</li>

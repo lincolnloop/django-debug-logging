@@ -1,9 +1,12 @@
+import os
+
+import django.views.static
+from django.conf import settings
 from django.shortcuts import get_object_or_404
 
 import nexus
 
 from debug_logging.models import DebugLogRecord
-
 
 class DebugLoggingModule(nexus.NexusModule):
     home_url = 'index'
@@ -16,6 +19,8 @@ class DebugLoggingModule(nexus.NexusModule):
         from django.conf.urls.defaults import patterns, url
         
         urlpatterns = patterns('',
+            url(r'^m/(.*)$', self.as_view(self.media),
+                name='media'),
             url(r'^$', self.as_view(self.index), name='index'),
             url(r'^record/(\d+)/$', self.as_view(self.record),
                 name='record_detail')
@@ -27,6 +32,15 @@ class DebugLoggingModule(nexus.NexusModule):
         return self.render_to_string('nexus/debug_logging/dashboard.html', {
             'title': 'Debug Logging',
         })
+    
+    def media(self, request, path):
+        root = getattr(settings, 'DEBUG_LOGGING_CONFIG', {}
+            ).get('MEDIA_ROOT', None)
+        if root is None:
+            parent = os.path.abspath(os.path.dirname(__file__))
+            root = os.path.join(parent, 'media', 'debug_logging')
+        return django.views.static.serve(request, path, root)
+
     
     def index(self, request):
         records = DebugLogRecord.objects.order_by('-timestamp')
