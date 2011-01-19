@@ -1,28 +1,40 @@
 {% extends "nexus/debug_logging/base.html" %}
 
+{% load adminmedia %}
+
 {% block content %}
-    <div id="changelist" class="module">
-      <table cellspacing="0">
-        <thead>
-          <tr>
-            <th>Request Path</th>
-            <th>Timestamp</th>
-            <th>Response Time</th>
-            <th>SQL Queries</th>
-            <th>Cache Hits</th>
-          </tr>
-        </thead>
-        <tbody>
-          {% for record in records %}
-          <tr>
-            <td>{{ record.request_path }}</td>
-            <td>{{ record.timestamp }}</td>
-            <td>{{ record.timer_total|floatformat:"0.3" }} ms</td>
-            <td>{{ record.sql_num_queries }}</td>
-            <td>{{ record.cache_hits }}</td>
-          </tr>
-          {% endfor %}
-        </tbody>
-      </table>
-    </div>
+  <div id="changelist" class="module">
+    <table cellspacing="0">
+      <thead>
+        <tr>
+          <th>View</th>
+          <th>Request Path</th>
+          <th>Timestamp</th>
+          <th>Response Time</th>
+          <th>SQL Queries</th>
+          <th>SQL Time</th>
+          <th>Cache</th>
+          <th>Cache Time</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for record in records %}
+        <tr>
+          <td>
+            <a href="{% url debug-logging:record_detail record.id %}">
+              <img src="{% admin_media_prefix %}img/admin/icon_searchbox.png">
+            </a>
+          </td>
+          <td>{{ record.request_path }}</td>
+          <td>{{ record.timestamp|date:"M dS, g:m:s a" }}</td>
+          <td>{{ record.timer_total|floatformat:"0.3" }} ms</td>
+          <td>{{ record.sql_num_queries }}</td>
+          <td>{{ record.sql_time|floatformat:"0.3" }} ms</td>
+          <td>{{ record.cache_hits }} hit / {{ record.cache_misses }} miss</td>
+          <td>{{ record.cache_time|floatformat:"0.3" }} ms</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
 {% endblock %}

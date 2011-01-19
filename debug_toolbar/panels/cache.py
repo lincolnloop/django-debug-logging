@@ -108,7 +108,6 @@ class CacheDebugPanel(DebugPanel):
     def process_response(self, request, response):
         if getattr(settings, 'DEBUG_LOGGING_CONFIG', {}).get('ENABLED', False):
             # Logging is enabled, so log the cache data
-            import pickle
 
             stats = {}
 
@@ -122,6 +121,6 @@ class CacheDebugPanel(DebugPanel):
             stats['cache_deletes'] = self.cache.deletes
             
             if settings.DEBUG_LOGGING_CONFIG.get('CACHE_EXTRA', False):
-                stats['cache_calls'] = pickle.dumps(self.cache.calls)
+                stats['cache_calls'] = self.cache.calls
             
             request.debug_logging_stats.update(stats)

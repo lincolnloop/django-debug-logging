@@ -1,3 +1,5 @@
+from django.shortcuts import get_object_or_404
+
 import nexus
 
 from debug_logging.models import DebugLogRecord
@@ -15,6 +17,8 @@ class DebugLoggingModule(nexus.NexusModule):
         
         urlpatterns = patterns('',
             url(r'^$', self.as_view(self.index), name='index'),
+            url(r'^record/(\d+)/$', self.as_view(self.record),
+                name='record_detail')
         )
         
         return urlpatterns
@@ -25,10 +29,16 @@ class DebugLoggingModule(nexus.NexusModule):
         })
     
     def index(self, request):
-        records = DebugLogRecord.objects.all()
+        records = DebugLogRecord.objects.order_by('-timestamp')
         
         return self.render_to_response("nexus/debug_logging/index.html", {
             'records': records,
+        }, request)
+    
+    def record(self, request, record_id):
+        record = get_object_or_404(DebugLogRecord, pk=record_id)
+        return self.render_to_response("nexus/debug_logging/record.html", {
+            'record': record,
         }, request)
 
 nexus.site.register(DebugLoggingModule, 'debug-logging')

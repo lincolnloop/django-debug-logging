@@ -1,0 +1,56 @@
+{% extends "nexus/debug_logging/base.html" %}
+
+{% block breadcrumb_bits %}
+  <li><a href="../../">Debug Logging</a></li>
+  <li>Record #{{ record.id }}</li>
+{% endblock %}
+
+{% block content_title %}
+  <h1>Record #{{ record.id }}</h1>
+{% endblock %}
+
+{% block content %}
+  <ul>
+    <li><strong>Timestamp:</strong> {{ record.timestamp|date:"M dS, g:m:s a" }}</li>
+    <li><strong>Project:</strong> {{ record.project_name }}</li>
+    <li><strong>Hostname:</strong> {{ record.hostname }}</li>
+    <li><strong>Request path:</strong> {{ record.request_path }}</li>
+    <li><strong>Revision:</strong> {{ record.revision }}</li>
+    </li>
+  </ul>
+  <h2>Timer Stats</h2>
+  <ul>
+    <li><strong>User CPU time:</strong> {{ record.timer_utime|floatformat:"0.3" }} ms</li>
+    <li><strong>System CPU time:</strong> {{ record.timer_stime|floatformat:"0.3" }} ms</li>
+    <li><strong>Total CPU time:</strong> {{ record.timer_cputime|floatformat:"0.3" }} ms</li>
+    <li><strong>Elapsed time:</strong> {{ record.timer_total|floatformat:"0.3" }} ms</li>
+    <li>
+      <strong>Context switches:</strong>
+      {{ record.timer_vcsw }} voluntary, {{ record.timer_ivcsw }} involuntary
+    </li>
+  </ul>
+  <h2>SQL Stats</h2>
+  <ul>
+    <li><strong>Queries:</strong> {{ record.sql_num_queries }}</li>
+    <li><strong>Time:</strong> {{ record.sql_time|floatformat:"0.3" }} ms</li>
+    {# Todo: create a click-to-view item for full SQL query data #}
+  </ul>
+  <h2>Cache Stats</h2>
+  <ul>
+    <li><strong>Calls:</strong> {{ record.cache_num_calls }}</li>
+    <li><strong>Time:</strong> {{ record.cache_time|floatformat:"0.3" }} ms</li>
+    <li><strong>Hits:</strong> {{ record.cache_hits }}</li>
+    <li><strong>Misses:</strong> {{ record.cache_misses }}</li>
+    <li><strong>Sets:</strong> {{ record.cache_sets }}</li>
+    <li><strong>Gets:</strong> {{ record.cache_gets }}</li>
+    <li><strong>Get many:</strong> {{ record.cache_get_many }}</li>
+    <li><strong>Deletes:</strong> {{ record.cache_deletes }}</li>
+    {# Todo: create a click-to-view item for full Cache call data #}
+  </ul>
+  <h2>Settings</h2>
+  <ul>
+  {% for var in record.settings.items|dictsort:"0" %}
+	  <li>{{ var.0 }} <code>{{ var.1|pprint }}</code></li>
+	{% endfor %}
+	</ul>
+{% endblock %}

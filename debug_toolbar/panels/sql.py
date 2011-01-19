@@ -241,8 +241,6 @@ class SQLDebugPanel(DebugPanel):
     def process_response(self, request, response):
         if getattr(settings, 'DEBUG_LOGGING_CONFIG', {}).get('ENABLED', False):
             # Logging is enabled, so log the query data
-            import pickle
-            
             self._queries = connection.queries[self._offset:]
             self._sql_time = sum([q['duration'] for q in self._queries])
             
@@ -251,7 +249,7 @@ class SQLDebugPanel(DebugPanel):
             if settings.DEBUG_LOGGING_CONFIG.get('SQL_EXTRA', False):
                 for query in self._queries:
                     query['sql'] = reformat_sql(query['sql'])
-                stats['sql_queries'] = pickle.dumps(self._queries)
+                stats['sql_queries'] = self._queries
             
             stats['sql_time'] = self._sql_time
             stats['sql_num_queries'] = len(self._queries)
