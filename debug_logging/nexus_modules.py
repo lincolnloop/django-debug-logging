@@ -2,11 +2,17 @@ import os
 
 import django.views.static
 from django.conf import settings
+from django.core.paginator import Paginator
+from django.db.models import Avg, Max
 from django.shortcuts import get_object_or_404
 
 import nexus
 
+from debug_logging.forms import DateRangeForm
 from debug_logging.models import DebugLogRecord
+
+RECORDS_PER_PAGE = 50
+
 
 class DebugLoggingModule(nexus.NexusModule):
     home_url = 'index'
@@ -43,10 +49,42 @@ class DebugLoggingModule(nexus.NexusModule):
 
     
     def index(self, request):
-        records = DebugLogRecord.objects.order_by('-timestamp')
+        from_date = DateRangeForm.DEFAULT_FROM_DATE
+        to_date = DateRangeForm.DEFAULT_TO_DATE
+        if request.GET:
+            form = DateRangeForm(data=request.GET)
+            if form.is_valid():
+                if form.cleaned_data.get('from_date'):
+                    from_date = form.cleaned_data['from_date']
+                if form.cleaned_data.get('to_date'):
+                    to_date = form.cleaned_data['to_date']
+        else:
+            form = DateRangeForm()
+        
+        records = DebugLogRecord.objects.filter(
+            timestamp__gte=from_date,
+            timestamp__lte=to_date,
+        ).order_by('-timestamp')
+        
+        aggregates = records.aggregate(
+            Avg('timer_total'),
+            Avg('timer_cputime'),
+            Avg('sql_time'),
+            Avg('sql_num_queries'),
+            Max('sql_num_queries'),
+        )
+        
+        p = Paginator(records, RECORDS_PER_PAGE)
+        try:
+            page_num = int(request.GET.get('p', 1))
+        except ValueError:
+            page_num = 1
+        page = p.page(page_num)
         
         return self.render_to_response("nexus/debug_logging/index.html", {
-            'records': records,
+            'form': form,
+            'page': page,
+            'aggregates': aggregates,
         }, request)
     
     def record(self, request, record_id):

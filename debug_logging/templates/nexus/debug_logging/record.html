@@ -36,22 +36,22 @@
   </tbody></table>
   <h2>Timer Stats</h2>
   <table class="recordinfo"><tbody>
-    <tr><th class="key">USER CPU TIME</th><td class="values">{{ record.timer_utime|floatformat:"0.3" }} ms</td></tr>
-    <tr><th class="key">SYSTEM CPU TIME</th><td class="values">{{ record.timer_stime|floatformat:"0.3" }} ms</td></tr>
-    <tr><th class="key">TOTAL CPU TIME</th><td class="values">{{ record.timer_cputime|floatformat:"0.3" }} ms</td></tr>
-    <tr><th class="key">ELAPSED TIME</th><td class="values">{{ record.timer_total|floatformat:"0.3" }} ms</td></tr>
+    <tr><th class="key">USER CPU TIME</th><td class="values">{{ record.timer_utime|floatformat:"-2" }} ms</td></tr>
+    <tr><th class="key">SYSTEM CPU TIME</th><td class="values">{{ record.timer_stime|floatformat:"-2" }} ms</td></tr>
+    <tr><th class="key">TOTAL CPU TIME</th><td class="values">{{ record.timer_cputime|floatformat:"-2" }} ms</td></tr>
+    <tr><th class="key">ELAPSED TIME</th><td class="values">{{ record.timer_total|floatformat:"-2" }} ms</td></tr>
     <tr><th class="key">CONTEXT SWITCHES</th><td class="values">{{ record.timer_vcsw }} voluntary, {{ record.timer_ivcsw }} involuntary</td></tr>
   </tbody></table>
   <h2>SQL Stats</h2>
   <table class="recordinfo"><tbody>
     <tr><th class="key">QUERIES</th><td class="values">{{ record.sql_num_queries }}</td></tr>
-    <tr><th class="key">TIME</th><td class="values">{{ record.sql_time|floatformat:"0.3" }} ms</td></tr>
+    <tr><th class="key">TIME</th><td class="values">{{ record.sql_time|floatformat:"-2" }} ms</td></tr>
     {# Todo: create a click-to-view item for full SQL query data #}
   </tbody></table>
   <h2>Cache Stats</h2>
   <table class="recordinfo"><tbody>
     <tr><th class="key">CALLS</th><td class="values">{{ record.cache_num_calls }}</td></tr>
-    <tr><th class="key">TIME</th><td class="values">{{ record.cache_time|floatformat:"0.3" }} ms</td></tr>
+    <tr><th class="key">TIME</th><td class="values">{{ record.cache_time|floatformat:"-2" }} ms</td></tr>
     <tr><th class="key">HITS</th><td class="values">{{ record.cache_hits }}</td></tr>
     <tr><th class="key">MISSES</th><td class="values">{{ record.cache_misses }}</td></tr>
     <tr><th class="key">SETS</th><td class="values">{{ record.cache_sets }}</td></tr>
