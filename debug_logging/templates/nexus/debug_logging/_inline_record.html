@@ -28,7 +28,7 @@
           SQL queries in {{ record.sql_time|floatformat:"-2" }} ms
         </span> 
         <span class="tag">
-          {{ record.cache_hits }} cache hits / {{ record.cache_misses }} misses in {{ record.cache_time|floatformat:"-2" }} ms
+          {{ record.cache_hits|default:"no" }} cache hits / {{ record.cache_misses|default:"no" }} misses in {{ record.cache_time|floatformat:"-2" }} ms
         </span>
     </p>
     {% if not record_class %}

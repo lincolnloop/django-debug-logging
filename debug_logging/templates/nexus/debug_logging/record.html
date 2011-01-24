@@ -33,6 +33,7 @@
       	  </tbody>
     	  </table>
     	</td>
+    </tr>
   </tbody></table>
   <h2>Timer Stats</h2>
   <table class="recordinfo"><tbody>
@@ -46,7 +47,23 @@
   <table class="recordinfo"><tbody>
     <tr><th class="key">QUERIES</th><td class="values">{{ record.sql_num_queries }}</td></tr>
     <tr><th class="key">TIME</th><td class="values">{{ record.sql_time|floatformat:"-2" }} ms</td></tr>
-    {# Todo: create a click-to-view item for full SQL query data #}
+    <tr><th class="key">INDIVIDUAL QUERIES</th>
+      <td>
+        <table class="vars expandable">
+          <thead>
+            <tr><th>Query</th><th>Time</th></tr>
+          </thead>
+          <tbody>
+            {% for query in record.sql_queries %}
+        	  <tr>
+        	    <td class="code">{{ query.sql|safe }}</td>
+        	    <td>{{ query.duration|floatformat:"-2" }}</td>
+        	  </tr>
+          	{% endfor %}
+      	  </tbody>
+    	  </table>
+    	</td>
+    </tr>
   </tbody></table>
   <h2>Cache Stats</h2>
   <table class="recordinfo"><tbody>

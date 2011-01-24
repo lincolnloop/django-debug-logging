@@ -247,8 +247,6 @@ class SQLDebugPanel(DebugPanel):
             stats = {}
             
             if settings.DEBUG_LOGGING_CONFIG.get('SQL_EXTRA', False):
-                for query in self._queries:
-                    query['sql'] = reformat_sql(query['sql'])
                 stats['sql_queries'] = self._queries
             
             stats['sql_time'] = self._sql_time

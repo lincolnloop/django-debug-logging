@@ -124,6 +124,7 @@ table.vars { border-collapse: collapse; background:white; margin-bottom: 10px; }
 table tbody td, table tbody th { vertical-align:top; padding:2px 3px; }
 table.meta th { text-align: right; white-space: nowrap; }
 table.vars thead th { padding:3px 6px 3px 3px; background:#eee; text-align:left; font-weight:bold; border:1px solid #ddd; border-width: 1px 0; font-size:11px; }
+table.vars.expandable { margin-top: 10px;}
 
 table.source th { color:#666; }
 table.source td { font-family:monospace; white-space:pre; border-bottom:1px solid #eee; }
