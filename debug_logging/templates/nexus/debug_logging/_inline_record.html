@@ -1,6 +1,9 @@
-<li class="row1 priority-low {{ record_class }}" id="group_1">
+<li class="row1 priority-low {{ record_class }}">
     <span class="count count-digits-4">
-      {{ record.timer_total|floatformat:"-2" }} ms
+      <span class="response-time">
+        {{ record.timer_total|floatformat:"-2" }}
+      </span>
+      ms
     </span>
     <h3>
       {% if not record_class %}
@@ -19,7 +22,10 @@
           CPU user {{ record.timer_utime|floatformat:"-2" }} ms / system {{ record.timer_stime|floatformat:"-2" }} ms
         </span>
         <span class="tag">
-          {{ record.sql_num_queries }} SQL queries in {{ record.sql_time|floatformat:"-2" }} ms
+          <span class="num-queries">
+            {{ record.sql_num_queries }}
+          </span>
+          SQL queries in {{ record.sql_time|floatformat:"-2" }} ms
         </span> 
         <span class="tag">
           {{ record.cache_hits }} cache hits / {{ record.cache_misses }} misses in {{ record.cache_time|floatformat:"-2" }} ms

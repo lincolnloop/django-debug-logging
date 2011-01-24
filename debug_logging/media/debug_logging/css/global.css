@@ -240,6 +240,7 @@ dl.flat dd {
 }
 
 .messages .tag { display: inline-block; padding: 2px 5px; background: #eaeaea; margin-right: 5px;}
+.messages .tag.warn { background: #CF070F; color: white;}
 .messages .traceback { display: none; }
 .messages li { padding: 8px; position: relative; padding-right: 50px; overflow: hidden;}
 .messages .row1 { background: #f9f9f9; }
@@ -279,6 +280,7 @@ dl.flat dd {
     border-radius: 5px;
 }
 .messages li:hover .tag { background: #fff; }
+.messages li:hover .tag.warn { background: #F10710; }
 .messages li:hover h3 a {
     color: #0099dc;
 }
@@ -413,10 +415,18 @@ dl.flat dd {
     background: -moz-linear-gradient(top,  #4da2e5,  #3079d0); /* for firefox 3.6+ */
 }
 
+.expandlink {
+    margin-right: 10px;
+}
+
 .sort-by select {
     border: 0;
     margin-left: 4px;
     background: inherit;
+}
+
+.resultfilter {
+    margin: 10px 0;
 }
 
 .filter-text {

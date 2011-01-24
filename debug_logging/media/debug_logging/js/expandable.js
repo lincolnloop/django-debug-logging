@@ -1,15 +1,15 @@
 /* Handles expandable elements */
 
 $(document).ready(function() {
-  $element = $('.expandable');
-  $element.hide();
-  $expandlink = $('<a class="expandlink">Expand</a>')
-  $expandlink.insertAfter($element).click(function() {
-    $element.fadeToggle('fast');
-    if ($expandlink.text() == 'Expand') {
-      $expandlink.text('Hide');
-    } else {
-      $expandlink.text('Expand');
-    }
+  $('.expandable').each(function() {
+    $(this).hide();
+    $('<a class="expandlink">Expand</a>').insertBefore(this).click(function() {
+      $(this).next('.expandable').fadeToggle('fast');
+      if ($(this).text() == 'Expand') {
+        $(this).text('Hide');
+      } else {
+        $(this).text('Expand');
+      }
+    });
   });
 });

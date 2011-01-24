@@ -13,7 +13,7 @@
   </div>
   
   <div class="aggregation">
-    <span class="inline-h3">Aggregated stats</span>
+    <span class="inline-h3">Aggregated stats:</span>
     <table class="vars expandable">
       <thead>
         <th>Statistic</th><th>Value</th>
@@ -40,6 +40,13 @@
         </tr>
       </tbody>
     </table>
+    <span class="inline-h3">Highlight thresholds:</span>
+    <div class="resultfilter expandable">
+      <label for="time-threshold">Response time:</label>
+      <input type="text" id="time-threshold" value="5000">
+      <label for="sql-threshold">SQL queries:</label>
+      <input type="text" id="sql-threshold" value="200">
+    </div>
   </div>
   
   <ul class="messages">
