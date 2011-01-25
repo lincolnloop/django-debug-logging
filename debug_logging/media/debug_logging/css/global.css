@@ -541,6 +541,7 @@ form .submit { text-align: right; }
 form .has-errors input,
 form .has-errors textarea { border-color: red; }
 form td .errors { color: red; margin-top: 5px; font-size: 0.9em; }
+form .error { color: red; }
 
 form td textarea {
     min-height: 250px;
