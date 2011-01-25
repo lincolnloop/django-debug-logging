@@ -29,27 +29,21 @@ class DebugLogRecord(models.Model):
     settings_pickled = models.TextField(blank=True, null=True)
     
     # Timer stats
-    timer_utime = models.DecimalField(max_digits=11, decimal_places=2, blank=True,
-                                      null=True)
-    timer_stime = models.DecimalField(max_digits=11, decimal_places=2, blank=True,
-                                      null=True)
-    timer_cputime = models.DecimalField(max_digits=11, decimal_places=2, blank=True,
-                                        null=True)
-    timer_total = models.DecimalField(max_digits=11, decimal_places=2, blank=True,
-                                      null=True)
+    timer_utime = models.FloatField(blank=True, null=True)
+    timer_stime = models.FloatField(blank=True, null=True)
+    timer_cputime = models.FloatField(blank=True, null=True)
+    timer_total = models.FloatField(blank=True, null=True)
     timer_vcsw = models.IntegerField(blank=True, null=True)
     timer_ivcsw = models.IntegerField(blank=True, null=True)
     
     # Sql stats
     sql_num_queries = models.IntegerField(blank=True, null=True)
-    sql_time = models.DecimalField(max_digits=11, decimal_places=2, blank=True,
-                                   null=True)
+    sql_time = models.FloatField(blank=True, null=True)
     sql_queries_pickled = models.TextField(blank=True, null=True)
     
     # Cache stats
     cache_num_calls = models.IntegerField(blank=True, null=True)
-    cache_time = models.DecimalField(max_digits=11, decimal_places=2, blank=True,
-                                   null=True)
+    cache_time = models.FloatField(blank=True, null=True)
     cache_hits = models.IntegerField(blank=True, null=True)
     cache_misses = models.IntegerField(blank=True, null=True)
     cache_sets = models.IntegerField(blank=True, null=True)
