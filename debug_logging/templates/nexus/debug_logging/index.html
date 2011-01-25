@@ -61,14 +61,14 @@
 		<ul class="paging-endless">
 		  {% if page.has_previous %}
 		    <li class="paging-previous">
-		      <a href="?&amp;p={{ page.previous_page_number }}">Previous Page</a>
+		      <a href="?p={{ page.previous_page_number }}&amp;from_date={{ from_date|urlencode }}&amp;to_date={{ to_date|urlencode }}">Previous Page</a>
 		    </li>
 		  {% else %}
 			  <li class="paging-previous"><span>Previous Page</span></li>
 			{% endif %}
 			{% if page.has_next %}
   			<li class="paging-next">
-  			  <a href="?&amp;p={{ page.next_page_number }}">Next Page</a>
+  			  <a href="?p={{ page.next_page_number }}&amp;from_date={{ from_date|date:"Y-m-d H:i:s"|urlencode }}&amp;to_date={{ to_date|date:"Y-m-d H:i:s"|urlencode }}">Next Page</a>
   			</li>
   		{% else %}
     		<li class="paging-next"><span>Next Page</span></li>

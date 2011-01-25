@@ -84,6 +84,8 @@ class DebugLoggingModule(nexus.NexusModule):
         return self.render_to_response("nexus/debug_logging/index.html", {
             'form': form,
             'page': page,
+            'from_date': from_date,
+            'to_date': to_date,
             'aggregates': aggregates,
         }, request)
     
