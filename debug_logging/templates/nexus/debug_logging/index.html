@@ -50,6 +50,13 @@
         </tr>
       </tbody>
     </table>
+    <span class="inline-h3">Sort by:</span>
+    <div class="resultfilter expandable">
+      <a href="?p={{ page.number }}&amp;from_date={{ from_date|date:"Y-m-d H:i:s"|urlencode }}&amp;to_date={{ to_date|date:"Y-m-d H:i:s"|urlencode }}">Timestamp</a> |
+      <a href="?p={{ page.number }}&amp;from_date={{ from_date|date:"Y-m-d H:i:s"|urlencode }}&amp;to_date={{ to_date|date:"Y-m-d H:i:s"|urlencode }}&amp;sort=response_time">Response time</a> |
+      <a href="?p={{ page.number }}&amp;from_date={{ from_date|date:"Y-m-d H:i:s"|urlencode }}&amp;to_date={{ to_date|date:"Y-m-d H:i:s"|urlencode }}&amp;sort=sql_queries">Sql queries</a> |
+      <a href="?p={{ page.number }}&amp;from_date={{ from_date|date:"Y-m-d H:i:s"|urlencode }}&amp;to_date={{ to_date|date:"Y-m-d H:i:s"|urlencode }}&amp;sort=sql_time">Sql time</a>
+    </div>
     <span class="inline-h3">Highlight thresholds:</span>
     <div class="resultfilter expandable">
       <label for="time-threshold">Response time:</label>
@@ -71,7 +78,7 @@
 		<ul class="paging-endless">
 		  {% if page.has_previous %}
 		    <li class="paging-previous">
-		      <a href="?p={{ page.previous_page_number }}&amp;from_date={{ from_date|urlencode }}&amp;to_date={{ to_date|urlencode }}">Previous Page</a>
+		      <a href="?p={{ page.previous_page_number }}&amp;from_date={{ from_date|date:"Y-m-d H:i:s"|urlencode }}&amp;to_date={{ to_date|date:"Y-m-d H:i:s"|urlencode }}">Previous Page</a>
 		    </li>
 		  {% else %}
 			  <li class="paging-previous"><span>Previous Page</span></li>

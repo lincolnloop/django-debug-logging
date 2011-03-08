@@ -51,6 +51,7 @@ class DebugLoggingModule(nexus.NexusModule):
     def index(self, request):
         from_date = DateRangeForm.DEFAULT_FROM_DATE
         to_date = DateRangeForm.DEFAULT_TO_DATE
+        sort = None
         if request.GET:
             form = DateRangeForm(data=request.GET)
             if form.is_valid():
@@ -58,13 +59,24 @@ class DebugLoggingModule(nexus.NexusModule):
                     from_date = form.cleaned_data['from_date']
                 if form.cleaned_data.get('to_date'):
                     to_date = form.cleaned_data['to_date']
+            
+            sort = request.GET.get('sort')
         else:
             form = DateRangeForm()
+        
+        if sort == 'response_time':
+            order_by = '-timer_total'
+        elif sort == 'sql_queries':
+            order_by = '-sql_num_queries'
+        elif sort == 'sql_time':
+            order_by = '-sql_time'
+        else:
+            order_by = '-timestamp'
         
         records = DebugLogRecord.objects.filter(
             timestamp__gte=from_date,
             timestamp__lte=to_date,
-        ).order_by('-timestamp')
+        ).order_by(order_by)
         
         aggregates = records.aggregate(
             Avg('timer_total'),
