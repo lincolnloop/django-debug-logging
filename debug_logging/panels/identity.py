@@ -6,7 +6,7 @@ from django.utils.importlib import import_module
 from debug_toolbar.panels import DebugPanel
 
 
-class IdentityDebugPanel(DebugPanel):
+class IdentityLoggingPanel(DebugPanel):
     """
     A panel to display the current site name and hostname, to identify the
     current environment for logging.

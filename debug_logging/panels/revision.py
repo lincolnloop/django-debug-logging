@@ -7,7 +7,7 @@ from django.utils.importlib import import_module
 from debug_toolbar.panels import DebugPanel
 
 
-class RevisionDebugPanel(DebugPanel):
+class RevisionLoggingPanel(DebugPanel):
     """
     A panel to display the current source code revision. Currently only
     supports git.
