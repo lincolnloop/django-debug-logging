@@ -1,33 +1,11 @@
-The Django Debug Toolbar was original created by Rob Hudson <rob@cogit8.org> in
-August 2008.
+The Django Debug Logging project was originally written by Brandon Konkle
+<brandon@lincolnloop.com> for a Lincoln Loop project.
 
-The following is a list of much appreciated contributors:
+Other contributors will be gladly recognized here once this project begins
+accepting pull requests.  Thank you!
 
-Reto Aebersold <aeby@atizo.com>
-Andi Albrecht <albrecht.andi@gmail.com>
-Chris Beaven <smileychris@gmail.com>
-Kenneth Belitzky <kenny@belitzky.com>
-Loic Bistuer <loic.bistuer@sixmedia.com>
-Etienne Carrier <etienne@px9.ca>
-David Cramer <dcramer@gmail.com>
-Michael Elsdoerfer <michael@elsdoerfer.com>
-Augie Fackler <durin42@gmail.com>
-Dan Fairs <dan@fezconsulting.com>
-Alex Gaynor <alex.gaynor@gmail.com>
-Idan Gazit <idan@pixane.com>
-Matt George <matt.george@myemma.com>
-Adam Gomaa <adam@adam.gomaa.us>
-Daniel Hahler <daniel@thequod.de>
-Jacob Kaplan-Moss <jacob@jacobian.org>
-Russell Keith-Magee <freakboy3742@gmail.com>
-Mikhail Korobov <kmike84@gmail.com>
-Arthur Koziel <arthur@arthurkoziel.com>
-Jannis Leidel <jannis@leidel.info>
-Martin Maney <maney@two14.net>
-Percy Perez-Pinedo <percyp3@gmail.com>
-Nowell Strite <nowell@strite.org>
-Malcolm Tredinnick <malcolm@pointy-stick.com>
-Bryan Veloso <bryan@revyver.com>
-Simon Willison <simon@simonwillison.net>
-Diego Búrigo Zacarão <diegobz@gmail.com>
-Philip Zeyliger <philip@cloudera.com>
+
+The Django Debug Toolbar was originally created by Rob Hudson <rob@cogit8.org>
+in August 2008.  Please see the project page for more information about the
+people that made that project, and this one, possible.
+https://github.com/django-debug-toolbar/django-debug-toolbar

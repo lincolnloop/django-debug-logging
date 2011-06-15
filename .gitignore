@@ -1,4 +1,4 @@
 *.pyc
 *.DS_Store
 *~
-django_debug_toolbar.egg-info
+django_debug_logging.egg-info
