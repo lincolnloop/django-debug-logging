@@ -3,7 +3,6 @@ try:
 except ImportError:
     pass # Will fail on Win32 systems
 import time
-from django.conf import settings
 from django.template.loader import render_to_string
 from django.utils.translation import ugettext_lazy as _
 from debug_toolbar.panels import DebugPanel
@@ -31,19 +30,6 @@ class TimerDebugPanel(DebugPanel):
         self.total_time = (time.time() - self._start_time) * 1000
         if self.has_resource:
             self._end_rusage = resource.getrusage(resource.RUSAGE_SELF)
-        
-        if getattr(settings, 'DEBUG_LOGGING_CONFIG', {}).get('ENABLED', False):
-            utime, stime, vcsw, ivcsw, minflt, majflt = self.get_stats()
-            stats = {
-                'timer_utime': utime,
-                'timer_stime': stime,
-                'timer_cputime': (utime + stime),
-                'timer_total': self.total_time,
-                'timer_vcsw': vcsw,
-                'timer_ivcsw': ivcsw,
-            }
-            request.debug_logging_stats.update(stats)
-            
 
     def nav_title(self):
         return _('Time')
@@ -65,8 +51,9 @@ class TimerDebugPanel(DebugPanel):
 
     def _elapsed_ru(self, name):
         return getattr(self._end_rusage, name) - getattr(self._start_rusage, name)
-    
-    def get_stats(self):
+
+    def content(self):
+
         utime = 1000 * self._elapsed_ru('ru_utime')
         stime = 1000 * self._elapsed_ru('ru_stime')
         vcsw = self._elapsed_ru('ru_nvcsw')
@@ -85,12 +72,7 @@ class TimerDebugPanel(DebugPanel):
 #        srss = self._end_rusage.ru_ixrss
 #        urss = self._end_rusage.ru_idrss
 #        usrss = self._end_rusage.ru_isrss
-        
-        return utime, stime, vcsw, ivcsw, minflt, majflt
-    
-    def content(self):
-        utime, stime, vcsw, ivcsw, minflt, majflt = self.get_stats()
-        
+
         # TODO l10n on values
         rows = (
             (_('User CPU time'), '%0.3f msec' % utime),
