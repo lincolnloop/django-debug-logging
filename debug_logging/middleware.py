@@ -1,5 +1,8 @@
 import logging
 
+from django.conf import settings
+
+from debug_toolbar.toolbar.loader import DebugToolbar
 from debug_toolbar.middleware import DebugToolbarMiddleware
 from debug_logging.handlers import DBHandler
 
@@ -43,7 +46,8 @@ class DebugLoggingMiddleware(DebugToolbarMiddleware):
         return response
     
     def process_response(self, request, response):
-        response = super(DebugLoggingMiddleware, self).process_response(request)
+        response = super(DebugLoggingMiddleware, self).process_response(
+            request, response)
         
         if response.status_code == 200:
             if self.logging_enabled and hasattr(request, 'debug_logging_stats'):

@@ -1,5 +1,6 @@
 import re
 from django.conf import settings
+from django.views.debug import get_safe_settings
 from debug_toolbar.panels.settings_vars import SettingsVarsDebugPanel
 
 DEFAULT_LOGGED_SETTINGS = [
@@ -11,7 +12,7 @@ DEFAULT_LOGGED_SETTINGS = [
 ]
 
 
-class SettingsVarsLoggingPanel(object):
+class SettingsVarsLoggingPanel(SettingsVarsDebugPanel):
     """Extends the Settings debug panel to enable logging."""
     
     def __init__(self, *args, **kwargs):
@@ -28,7 +29,7 @@ class SettingsVarsLoggingPanel(object):
             safe_settings = get_safe_settings()
             log_settings = {}
             for k, v in safe_settings.items():
-                if LOGGED_SETTINGS.search(k):
+                if self.logged_settings_re.search(k):
                     log_settings[k] = v
 
             request.debug_logging_stats['settings'] = log_settings
