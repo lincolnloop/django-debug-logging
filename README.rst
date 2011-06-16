@@ -146,6 +146,9 @@ log won't be clogged with information you have no use for.
 To Do
 -----
 
+* Add a --repeat option to the log_urls command so that the urls can be run
+  through multiple times.
+
 * Create a model to group log records into 'runs', capturing start date and end
   date and aggregated stats.  This will make it easier to run your url test
   repeatedly over time and see the impact of your changes.
