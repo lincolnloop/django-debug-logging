@@ -75,14 +75,17 @@ add them to your DEBUG_TOOLBAR_PANELS setting::
     'debug_logging.panels.revision.RevisionLoggingPanel',
     'debug_logging.panels.identity.IdentityLoggingPanel',
 
+**If enabled, any request to your site will result in a new row in the logging
+table.** You probably don't want to enable it during regular day-to-day
+development.
+
 To enable logging, create a DEBUG_LOGGING_CONFIG setting that looks like this::
 
     DEBUG_LOGGING_CONFIG = {
         'ENABLED': True,
     }
 
-If enabled, any request to your site will result in a new row in the logging
-table.  To prevent any performance impact from the rendering of the Debug
+To prevent any performance impact from the rendering of the Debug
 Toolbar, it is not shown.
 
 Finally, run syncdb to create the models for statistic logging::
