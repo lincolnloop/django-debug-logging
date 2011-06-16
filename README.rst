@@ -107,6 +107,22 @@ There are a few optional DEBUG_LOGGING_CONFIG settings, as well.
 * ``CACHE_EXTRA``: This determines whether the full details of each cache call
   are logged, or just the summary details. It defaults to `` False``.
 
+Running a Url Test
+------------------
+
+A management command is included that uses the test client to hit a list of
+urls in sequence, allowing them to be logged to the database.  To use it, first
+create a list of urls with a new url on each line.  Lines beginning with # are
+ignored.
+
+Then, enable logging and run the *log_urls* management command::
+
+    $ python manage.py log_urls myapp/my_urls.txt
+
+Unless it is run with a verbosity of 0, the command will output status
+such as urls that return status codes other than 200, and urls that raise
+errors.
+
 Interface
 ---------
 
