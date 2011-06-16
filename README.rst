@@ -110,8 +110,18 @@ There are a few optional DEBUG_LOGGING_CONFIG settings, as well.
 Interface
 ---------
 
-More information about the frontend interface is coming soon.
+The frontend interface uses the Nexus_ project from the Disqus team.  Once
+Nexus is installed, make sure you add *nexus/* to your urls::
 
+    (r'^nexus/', include(nexus.site.urls)),
+
+Nexus should autodetect debug-logging, and the interface should be available
+at::
+
+    /nexus/debug-logging/
+
+The Debug Logger will ignore requests made to this frontend interface, so your
+log won't be clogged with information you have no use for.
 
 .. _Django Debug Toolbar: https://github.com/django-debug-toolbar/django-debug-toolbar
 

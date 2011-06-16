@@ -1,6 +1,7 @@
 import logging
 
 from django.conf import settings
+from django.core.urlresolvers import reverse, NoReverseMatch
 
 from debug_toolbar.toolbar.loader import DebugToolbar
 from debug_toolbar.middleware import DebugToolbarMiddleware
@@ -33,6 +34,14 @@ class DebugLoggingMiddleware(DebugToolbarMiddleware):
     
     def process_request(self, request):
         response = super(DebugLoggingMiddleware, self).process_request(request)
+        
+        # If the debug-logging frontend is in use, don't log requests to the UI
+        try:
+            debug_logging_prefix = reverse('debug-logging:index')
+            if debug_logging_prefix in request.path:
+                return
+        except NoReverseMatch:
+            pass
         
         if self.logging_enabled:
             # Add an attribute to the request to track stats, and log the
