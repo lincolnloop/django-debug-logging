@@ -9,8 +9,9 @@ then review and aggregate the results afterwards to identify performance
 problems.
 
 It also provides a basic UI for browsing the details that have been logged to
-the database and reviewing aggregated information about test runs.
-
+the database and reviewing aggregated information about test runs.  The UI
+borrows a lot from Sentry_, which is a fantastic app for logging errors to the
+database.
 
 Prerequisites
 -------------
@@ -139,10 +140,6 @@ at::
 The Debug Logger will ignore requests made to this frontend interface, so your
 log won't be clogged with information you have no use for.
 
-.. _Django Debug Toolbar: https://github.com/django-debug-toolbar/django-debug-toolbar
-
-.. _Nexus: https://github.com/dcramer/nexus
-
 To Do
 -----
 
@@ -153,6 +150,15 @@ To Do
   date and aggregated stats.  This will make it easier to run your url test
   repeatedly over time and see the impact of your changes.
 
+* Take more inspiration from Sentry and group hits on the same urls within the
+  same run together, showing aggregated and individual stats.
+
 * Graph the aggregated stats of the runs.
 
 * [Maybe] Create a UI that is more user-friendly and not dependent on Nexus.
+
+.. _Django Debug Toolbar: https://github.com/django-debug-toolbar/django-debug-toolbar
+
+.. _Nexus: https://github.com/dcramer/nexus
+
+.. _Sentry: https://github.com/dcramer/sentry
