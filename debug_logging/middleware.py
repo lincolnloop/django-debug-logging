@@ -35,15 +35,21 @@ class DebugLoggingMiddleware(DebugToolbarMiddleware):
     def process_request(self, request):
         response = super(DebugLoggingMiddleware, self).process_request(request)
         
-        # If the debug-logging frontend is in use, don't log requests to the UI
-        try:
-            debug_logging_prefix = reverse('debug-logging:index')
-            if debug_logging_prefix in request.path:
-                return
-        except NoReverseMatch:
-            pass
-        
         if self.logging_enabled:
+            blacklist = settings.DEBUG_LOGGING_CONFIG.get('BLACKLIST', [])
+            
+            # If the debug-logging frontend is in use, add it to the blacklist
+            try:
+                debug_logging_prefix = reverse('debug-logging:index')
+                blacklist.append(debug_logging_prefix)
+            except NoReverseMatch:
+                pass
+            
+            # Don't log requests to urls in the blacklist
+            for blacklist_url in blacklist:
+                if request.path.startswith(blacklist_url):
+                    return response
+            
             # Add an attribute to the request to track stats, and log the
             # request path
             request.debug_logging_stats = {'request_path': request.path}
