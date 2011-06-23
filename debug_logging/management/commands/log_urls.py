@@ -34,7 +34,6 @@ class Command(BaseCommand):
         for url in urls:
             try:
                 self.client = Client()
-                print url
                 response = self.client.get(url)
             except KeyboardInterrupt, e:
                 raise CommandError('Debug logging run cancelled.')

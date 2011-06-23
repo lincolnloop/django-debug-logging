@@ -9,8 +9,39 @@ then review and aggregate the results afterwards to identify performance
 problems.
 
 It also provides a basic UI for browsing the details that have been logged to
-the database and reviewing aggregated information about test runs.
+the database and reviewing aggregated information about test runs.  The UI
+borrows a lot from Sentry_, which is a fantastic app for logging errors to the
+database.
 
+Screenshots
+-----------
+
+The main Debug Logging frontend view:
+
+.. image:: https://github.com/lincolnloop/django-debug-logging/raw/develop/docs/screenshots/debug_logging.png
+   :width: 354px
+   :height: 246px
+   :scale: 50%
+   :alt: Debug Logging main view
+   :target: https://github.com/lincolnloop/django-debug-logging/raw/develop/docs/screenshots/debug_logging.png
+
+Aggregated stats:
+
+.. image:: https://github.com/lincolnloop/django-debug-logging/raw/develop/docs/screenshots/debug_logging_2.png
+   :width: 426px
+   :height: 176px
+   :scale: 50%
+   :alt: Debug Logging aggregated stats
+   :target: https://github.com/lincolnloop/django-debug-logging/raw/develop/docs/screenshots/debug_logging_2.png
+
+The detail view:
+
+.. image:: https://github.com/lincolnloop/django-debug-logging/raw/develop/docs/screenshots/debug_logging_3.png
+   :width: 354px
+   :height: 261px
+   :scale: 50%
+   :alt: Debug Logging detail view
+   :target: https://github.com/lincolnloop/django-debug-logging/raw/develop/docs/screenshots/debug_logging_3.png
 
 Prerequisites
 -------------
@@ -40,7 +71,8 @@ Next, you'll add *debug_logging* and *nexus* to your INSTALLED_APPS::
     )
 
 Now, you'll need to replace the standard DebugToolbarMiddleware with a
-middleware that extends it to add logging functionality.
+middleware that extends it to add logging functionality.  The toolbar will
+still function normally when logging is disabled.
 
 From your MIDDLEWARE_CLASSES setting, remove::
 
@@ -98,7 +130,9 @@ Toolbar, it is not shown.
 Settings
 --------
 
-There are a few optional DEBUG_LOGGING_CONFIG settings, as well.
+* ``ENABLED``: If enabled, the debug logger will log the performance details of
+  each request. The debug toolbar interface will not be shown until logging is
+  disabled again.
 
 * ``SQL_EXTRA``: This setting determines whether the full details of each query
   are logged, or just the number of queries and the total time.  It defaults to
@@ -106,6 +140,10 @@ There are a few optional DEBUG_LOGGING_CONFIG settings, as well.
 
 * ``CACHE_EXTRA``: This determines whether the full details of each cache call
   are logged, or just the summary details. It defaults to `` False``.
+
+* ``BLACKLIST``: Add a list of url prefixes that you would like to exclude from
+  logging here.  The url for the Debug Logging frontend interface is added to
+  this blacklist automatically.
 
 Running a Url Test
 ------------------
@@ -139,17 +177,25 @@ at::
 The Debug Logger will ignore requests made to this frontend interface, so your
 log won't be clogged with information you have no use for.
 
-.. _Django Debug Toolbar: https://github.com/django-debug-toolbar/django-debug-toolbar
-
-.. _Nexus: https://github.com/dcramer/nexus
-
 To Do
 -----
+
+* Add a --repeat option to the log_urls command so that the urls can be run
+  through multiple times.
 
 * Create a model to group log records into 'runs', capturing start date and end
   date and aggregated stats.  This will make it easier to run your url test
   repeatedly over time and see the impact of your changes.
 
+* Take more inspiration from Sentry and group hits on the same urls within the
+  same run together, showing aggregated and individual stats.
+
 * Graph the aggregated stats of the runs.
 
 * [Maybe] Create a UI that is more user-friendly and not dependent on Nexus.
+
+.. _Django Debug Toolbar: https://github.com/django-debug-toolbar/django-debug-toolbar
+
+.. _Nexus: https://github.com/dcramer/nexus
+
+.. _Sentry: https://github.com/dcramer/sentry
