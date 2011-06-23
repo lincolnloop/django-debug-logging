@@ -41,7 +41,8 @@ Next, you'll add *debug_logging* and *nexus* to your INSTALLED_APPS::
     )
 
 Now, you'll need to replace the standard DebugToolbarMiddleware with a
-middleware that extends it to add logging functionality.
+middleware that extends it to add logging functionality.  The toolbar will
+still function normally when logging is disabled.
 
 From your MIDDLEWARE_CLASSES setting, remove::
 
