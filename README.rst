@@ -21,6 +21,7 @@ The main Debug Logging frontend view:
 .. image:: https://github.com/lincolnloop/django-debug-logging/raw/develop/docs/screenshots/debug_logging.png
    :width: 354px
    :height: 246px
+   :scale: 50%
    :alt: Debug Logging main view
    :target: https://github.com/lincolnloop/django-debug-logging/raw/develop/docs/screenshots/debug_logging.png
 
@@ -29,6 +30,7 @@ Aggregated stats:
 .. image:: https://github.com/lincolnloop/django-debug-logging/raw/develop/docs/screenshots/debug_logging_2.png
    :width: 426px
    :height: 176px
+   :scale: 50%
    :alt: Debug Logging aggregated stats
    :target: https://github.com/lincolnloop/django-debug-logging/raw/develop/docs/screenshots/debug_logging_2.png
 
@@ -37,6 +39,7 @@ The detail view:
 .. image:: https://github.com/lincolnloop/django-debug-logging/raw/develop/docs/screenshots/debug_logging_3.png
    :width: 354px
    :height: 261px
+   :scale: 50%
    :alt: Debug Logging detail view
    :target: https://github.com/lincolnloop/django-debug-logging/raw/develop/docs/screenshots/debug_logging_3.png
 
