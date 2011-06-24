@@ -13,6 +13,12 @@ the database and reviewing aggregated information about test runs.  The UI
 borrows a lot from Sentry_, which is a fantastic app for logging errors to the
 database.
 
+The overall goal is to use this tool to monitor performance statistics over
+time, so that you can see trends and spikes in the number of queries, cache
+misses, cpu time, etc., and identify where in the app the problems are coming
+from. It is not intended as a load testing tool (yet), so features like
+concurrency and warmup periods will not be part of the initial focus.
+
 Screenshots
 -----------
 
