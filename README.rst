@@ -157,8 +157,8 @@ Then, enable logging and run the *log_urls* management command::
 
     $ python manage.py log_urls myapp/my_urls.txt
 
-Unless it is run with a verbosity of 0, the command will output status
-such as urls that return status codes other than 200, and urls that raise
+Unless it is run with a verbosity of 0 the command will output status
+messages, such as urls that return codes other than 200 and urls that raise
 errors.
 
 Interface
@@ -187,12 +187,15 @@ To Do
   date and aggregated stats.  This will make it easier to run your url test
   repeatedly over time and see the impact of your changes.
 
-* Take more inspiration from Sentry and group hits on the same urls within the
-  same run together, showing aggregated and individual stats.
+* Write more complex performance tests that use TestCase classes and log each
+  request from the Django test client.
 
 * Graph the aggregated stats of the runs.
 
-* [Maybe] Create a UI that is more user-friendly and not dependent on Nexus.
+* Take more inspiration from Sentry and group hits on the same urls within the
+  same run together, showing aggregated and individual stats.
+
+* Create a UI that is more user-friendly and not dependent on Nexus.
 
 .. _Django Debug Toolbar: https://github.com/django-debug-toolbar/django-debug-toolbar
 
