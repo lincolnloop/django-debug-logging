@@ -58,6 +58,9 @@ Debug Toolbar and extend its functionality to support logging.
 Nexus_ - This is a pluggable admin app created by the Disqus team.  It is used
 to present the UI for reviewing your debug logs.
 
+Picklefield_ - Used to saved pickled versions of settings, sql queries, and
+cache calls to the database.
+
 Installation
 ------------
 
@@ -67,6 +70,8 @@ properly.
 Install the project with pip::
 
     $ pip install django-debug-logging
+
+This should install Nexus and django-picklefield as well, which are needed.
 
 Next, you'll add *debug_logging* and *nexus* to your INSTALLED_APPS::
 
@@ -206,5 +211,7 @@ To Do
 .. _Django Debug Toolbar: https://github.com/django-debug-toolbar/django-debug-toolbar
 
 .. _Nexus: https://github.com/dcramer/nexus
+
+.. _Picklefield: https://github.com/gintas/django-picklefield
 
 .. _Sentry: https://github.com/dcramer/sentry
