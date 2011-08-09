@@ -191,12 +191,14 @@ log won't be clogged with information you have no use for.
 To Do
 -----
 
-* Add a --repeat option to the log_urls command so that the urls can be run
-  through multiple times.
+* Create a UI that is more user-friendly and not dependent on Nexus.
 
 * Create a model to group log records into 'runs', capturing start date and end
   date and aggregated stats.  This will make it easier to run your url test
   repeatedly over time and see the impact of your changes.
+
+* Add a --repeat option to the log_urls command so that the urls can be run
+  through multiple times.
 
 * Write more complex performance tests that use TestCase classes and log each
   request from the Django test client.
@@ -205,8 +207,6 @@ To Do
 
 * Take more inspiration from Sentry and group hits on the same urls within the
   same run together, showing aggregated and individual stats.
-
-* Create a UI that is more user-friendly and not dependent on Nexus.
 
 .. _Django Debug Toolbar: https://github.com/django-debug-toolbar/django-debug-toolbar
 

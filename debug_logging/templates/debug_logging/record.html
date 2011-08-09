@@ -1,0 +1,81 @@
+{% extends "nexus/debug_logging/base.html" %}
+
+{% block breadcrumb_bits %}
+  <li><a href="../../">Debug Logging</a></li>
+  <li>Request for {{ record.request_path }}</li>
+{% endblock %}
+
+{% block content_title %}
+  <ul class="messages">
+    {% with "active" as record_class %}
+      {% include "nexus/debug_logging/_inline_record.html" %}
+    {% endwith %}
+  </ul>
+{% endblock %}
+
+{% block content %}
+  <table class="recordinfo"><tbody>
+    <tr><th class="key">TIMESTAMP</th><td class="values">{{ record.timestamp|date:"M dS, g:m:s a" }}</td></tr>
+    <tr><th class="key">PROJECT</th><td class="values">{{ record.project_name }}</td></tr>
+    <tr><th class="key">HOSTNAME</th><td class="values">{{ record.hostname }}</td></tr>
+    <tr><th class="key">REQUEST PATH</th><td>{{ record.request_path }}</td></tr>
+    <tr><th class="key">REVISION</th><td>{{ record.revision }}</td></tr>
+    <tr><th class="key">SETTINGS</th>
+      <td>
+        <table class="vars expandable">
+          <thead>
+            <tr><th>Variable</th><th>Value</th></tr>
+          </thead>
+          <tbody>
+            {% for var in record.settings.items|dictsort:"0" %}
+        	  <tr><td>{{ var.0 }}</td><td class="code">{{ var.1|pprint }}</td></tr>
+          	{% endfor %}
+      	  </tbody>
+    	  </table>
+    	</td>
+    </tr>
+  </tbody></table>
+  <h2>Timer Stats</h2>
+  <table class="recordinfo"><tbody>
+    <tr><th class="key">USER CPU TIME</th><td class="values">{{ record.timer_utime|floatformat:"-2" }} ms</td></tr>
+    <tr><th class="key">SYSTEM CPU TIME</th><td class="values">{{ record.timer_stime|floatformat:"-2" }} ms</td></tr>
+    <tr><th class="key">TOTAL CPU TIME</th><td class="values">{{ record.timer_cputime|floatformat:"-2" }} ms</td></tr>
+    <tr><th class="key">ELAPSED TIME</th><td class="values">{{ record.timer_total|floatformat:"-2" }} ms</td></tr>
+    <tr><th class="key">CONTEXT SWITCHES</th><td class="values">{{ record.timer_vcsw }} voluntary, {{ record.timer_ivcsw }} involuntary</td></tr>
+  </tbody></table>
+  <h2>SQL Stats</h2>
+  <table class="recordinfo"><tbody>
+    <tr><th class="key">QUERIES</th><td class="values">{{ record.sql_num_queries }}</td></tr>
+    <tr><th class="key">TIME</th><td class="values">{{ record.sql_time|floatformat:"-2" }} ms</td></tr>
+    <tr><th class="key">INDIVIDUAL QUERIES</th>
+      <td>
+        <table class="vars expandable">
+          <thead>
+            <tr><th>Query</th><th>Time</th></tr>
+          </thead>
+          <tbody>
+            {% for query in record.sql_queries %}
+        	  <tr>
+        	    <td class="code">{{ query.sql|safe }}</td>
+        	    <td>{{ query.duration|floatformat:"-2" }}</td>
+        	  </tr>
+          	{% endfor %}
+      	  </tbody>
+    	  </table>
+    	</td>
+    </tr>
+  </tbody></table>
+  <h2>Cache Stats</h2>
+  <table class="recordinfo"><tbody>
+    <tr><th class="key">CALLS</th><td class="values">{{ record.cache_num_calls }}</td></tr>
+    <tr><th class="key">TIME</th><td class="values">{{ record.cache_time|floatformat:"-2" }} ms</td></tr>
+    <tr><th class="key">HITS</th><td class="values">{{ record.cache_hits }}</td></tr>
+    <tr><th class="key">MISSES</th><td class="values">{{ record.cache_misses }}</td></tr>
+    <tr><th class="key">SETS</th><td class="values">{{ record.cache_sets }}</td></tr>
+    <tr><th class="key">GETS</th><td class="values">{{ record.cache_gets }}</td></tr>
+    <tr><th class="key">GET MANY</th><td class="values">{{ record.cache_get_many }}</td></tr>
+    <tr><th class="key">DELETES</th><td class="values">{{ record.cache_deletes }}</td></tr>
+    {# Todo: create a click-to-view item for full Cache call data #}
+  </tbody></table>
+{% endblock %}
+
