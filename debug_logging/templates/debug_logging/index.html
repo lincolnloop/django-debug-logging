@@ -13,14 +13,6 @@
   {% endfor %}
 {% endblock %}
 
-{% block sidebar %}
-  <h3>Test Run Status</h3>
-  <ul>
-    <li><a href="#" id="start-run">Start a run</a></li>
-    <li><a href="#" id="cancel-run">Cancel a run</a></li>
-  </ul>
-{% endblock %}
-
 {% block extra_js %}
   <script src="{{ STATIC_URL }}debug_logging/js/test_run.js" type="text/javascript"></script>
 {% endblock %}

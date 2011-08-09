@@ -13,10 +13,9 @@ class DBHandler(logging.Handler):
                 if record.msg.has_key(key):
                     filters[key] = record.msg.pop(key)
             
-            # Check for a test run meeting the criteria that hasn't ended yet
-            test_run = TestRun.objects.filter(end__isnull=True, **filters)
-            if test_run:
-                record.msg['test_run'] = test_run
+            # Find the open test run for this project
+            test_run = TestRun.objects.get(end__isnull=True, **filters)
+            record.msg['test_run'] = test_run
             
             instance = DebugLogRecord(**record.msg)
             instance.save()
