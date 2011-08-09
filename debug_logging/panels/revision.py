@@ -1,10 +1,7 @@
-import os.path
-import subprocess
-
 from django.conf import settings
 from django.utils.translation import ugettext_lazy as _
-from django.utils.importlib import import_module
 from debug_toolbar.panels import DebugPanel
+from debug_toolbar.utils import get_revision
 
 
 class RevisionLoggingPanel(DebugPanel):
@@ -29,11 +26,4 @@ class RevisionLoggingPanel(DebugPanel):
             })
     
     def get_revision(self):
-        vcs = getattr(settings, 'DEBUG_TOOLBAR_CONFIG', {}).get('VCS', None)
-        if vcs == 'git':
-            module = import_module(settings.SETTINGS_MODULE)
-            path = os.path.realpath(os.path.dirname(module.__file__))
-            cmd = 'cd %s && git rev-parse --verify --short HEAD' % path
-            proc = subprocess.Popen(cmd, stdout=subprocess.PIPE, shell=True)
-            proc_stdout, proc_stderr = proc.communicate()
-            return proc_stdout
+        return get_revision()

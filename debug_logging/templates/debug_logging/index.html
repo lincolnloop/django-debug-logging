@@ -1,96 +1,22 @@
 {% extends "debug_logging/base.html" %}
 
+{% block title %}Home{% endblock %}
+
 {% block body %}
-  <div class="date-range">
-    <span class="inline-h3">Enter a date range</span>
-    <form method="get" action="?">
-      <span class="textfield">
-        {{ form.from_date }}
-        {% if form.from_date.errors %}
-          {% for error in form.from_date.errors %}
-          <span class="error">{{ error }}</span>
-          {% endfor %}
-        {% endif %}
-        {{ form.to_date }}
-        {% if form.to_date.errors %}
-          {% for error in form.to_date.errors %}
-          <span class="error">{{ error }}</span>
-          {% endfor %}
-        {% endif %}
-        <input type="submit">
-      </span>
-    </form>
-  </div>
-  
-  <div class="aggregation">
-    <span class="inline-h3">Aggregated stats:</span>
-    <table class="vars expandable">
-      <thead>
-        <th>Statistic</th><th>Value</th>
-      <tbody>
-        <tr>
-          <td>Avg Elapsed Time</td>
-          <td>{{ aggregates.timer_total__avg|floatformat:"-2" }} ms</td>
-        </tr>
-        <tr>
-          <td>Avg CPU Time</td>
-          <td>{{ aggregates.timer_cputime__avg|floatformat:"-2" }} ms</td>
-        </tr>
-        <tr>
-          <td>Avg SQL Time</td>
-          <td>{{ aggregates.sql_time__avg|floatformat:"-2" }} ms</td>
-        </tr>
-        <tr>
-          <td>Avg SQL Queries</td>
-          <td>{{ aggregates.sql_num_queries__avg|floatformat:"-2" }}</td>
-        </tr>
-        <tr>
-          <td>Max SQL Queries</td>
-          <td>{{ aggregates.sql_num_queries__max }}</td>
-        </tr>
-      </tbody>
-    </table>
-    <span class="inline-h3">Sort by:</span>
-    <div class="resultfilter expandable">
-      <a href="?p={{ page.number }}&amp;from_date={{ from_date|date:"Y-m-d H:i:s"|urlencode }}&amp;to_date={{ to_date|date:"Y-m-d H:i:s"|urlencode }}">Timestamp</a> |
-      <a href="?p={{ page.number }}&amp;from_date={{ from_date|date:"Y-m-d H:i:s"|urlencode }}&amp;to_date={{ to_date|date:"Y-m-d H:i:s"|urlencode }}&amp;sort=response_time">Response time</a> |
-      <a href="?p={{ page.number }}&amp;from_date={{ from_date|date:"Y-m-d H:i:s"|urlencode }}&amp;to_date={{ to_date|date:"Y-m-d H:i:s"|urlencode }}&amp;sort=sql_queries">Sql queries</a> |
-      <a href="?p={{ page.number }}&amp;from_date={{ from_date|date:"Y-m-d H:i:s"|urlencode }}&amp;to_date={{ to_date|date:"Y-m-d H:i:s"|urlencode }}&amp;sort=sql_time">Sql time</a>
-    </div>
-    <span class="inline-h3">Highlight thresholds:</span>
-    <div class="resultfilter expandable">
-      <label for="time-threshold">Response time:</label>
-      <input type="text" id="time-threshold" value="3000">
-      <label for="sql-threshold">SQL queries:</label>
-      <input type="text" id="sql-threshold" value="200">
-    </div>
-  </div>
-  
-  <ul class="messages">
-    {% for record in page.object_list %}
-      {% include "nexus/debug_logging/_inline_record.html" %}
-    {% endfor %}
+  <h1>Django Debug Logging</h1>
+  <p>Select a test run below to review the results.</p>
+  <h2>Test Runs</h2>
+  {% for run in runs %}
+    <a href="{{ run.get_absolute_url }}">{{ run.start }}</a>
+  {% empty %}
+    <p>There are no test runs available to review.</p>
+  {% endfor %}
+{% endblock %}
+
+{% block sidebar %}
+  <h3>Test Run Status</h3>
+  <ul>
+    <li><a href="#">Start a run</a></li>
+    <li><a href="#">Cancel a run</a></li>
   </ul>
-  
-  {% if page.has_previous or page.has_next %}
-  <div class="paging">
-		<div class="paging-meta">Page {{ page.number }}</div>
-		<ul class="paging-endless">
-		  {% if page.has_previous %}
-		    <li class="paging-previous">
-		      <a href="?p={{ page.previous_page_number }}&amp;from_date={{ from_date|date:"Y-m-d H:i:s"|urlencode }}&amp;to_date={{ to_date|date:"Y-m-d H:i:s"|urlencode }}">Previous Page</a>
-		    </li>
-		  {% else %}
-			  <li class="paging-previous"><span>Previous Page</span></li>
-			{% endif %}
-			{% if page.has_next %}
-  			<li class="paging-next">
-  			  <a href="?p={{ page.next_page_number }}&amp;from_date={{ from_date|date:"Y-m-d H:i:s"|urlencode }}&amp;to_date={{ to_date|date:"Y-m-d H:i:s"|urlencode }}">Next Page</a>
-  			</li>
-  		{% else %}
-    		<li class="paging-next"><span>Next Page</span></li>
-    	{% endif %}
-		</ul>
-	</div>
-	{% endif %}
 {% endblock %}

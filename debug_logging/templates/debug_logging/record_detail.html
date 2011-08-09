@@ -1,4 +1,4 @@
-{% extends "nexus/debug_logging/base.html" %}
+{% extends "debug_logging/base.html" %}
 
 {% block breadcrumb_bits %}
   <li><a href="../../">Debug Logging</a></li>
@@ -8,7 +8,7 @@
 {% block content_title %}
   <ul class="messages">
     {% with "active" as record_class %}
-      {% include "nexus/debug_logging/_inline_record.html" %}
+      {% include "debug_logging/_inline_record.html" %}
     {% endwith %}
   </ul>
 {% endblock %}

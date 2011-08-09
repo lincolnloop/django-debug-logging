@@ -3,5 +3,6 @@ from django.conf.urls.defaults import patterns, url
 
 urlpatterns = patterns('debug_logging.views',
     url(r'^$', 'index', name='index'),
-    url(r'^record/(\d+)/$', 'record_detail', name='record_detail')
+    url(r'^run/(\d+)/$', 'run_detail', name='run_detail'),
+    url(r'^record/(\d+)/$', 'record_detail', name='record_detail'),
 )

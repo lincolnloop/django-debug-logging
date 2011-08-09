@@ -1,16 +1,30 @@
+from datetime import datetime
+
 from django.conf import settings
-from django.template import RequestContext
 from django.core.paginator import Paginator
+from django.core.serializers.json import DjangoJSONEncoder
 from django.db.models import Avg, Max
+from django.http import HttpResponse
 from django.shortcuts import get_object_or_404, render_to_response
+from django.template import RequestContext
+from django.utils import simplejson
 
 from debug_logging.forms import DateRangeForm
-from debug_logging.models import DebugLogRecord
+from debug_logging.models import DebugLogRecord, TestRun
+from debug_logging.utils import get_project_name, get_hostname, get_revision
 
 RECORDS_PER_PAGE = 50
 
 
 def index(request):
+    runs = TestRun.objects.all()
+    
+    return render_to_response("debug_logging/index.html", {
+        'runs': runs,
+    }, context_instance=RequestContext(request))
+
+
+def run_detail(request):
     from_date = DateRangeForm.DEFAULT_FROM_DATE
     to_date = DateRangeForm.DEFAULT_TO_DATE
     sort = None
@@ -55,7 +69,7 @@ def index(request):
         page_num = 1
     page = p.page(page_num)
     
-    return render_to_response("debug_logging/index.html", {
+    return render_to_response("debug_logging/run_detail.html", {
         'form': form,
         'page': page,
         'from_date': from_date,
@@ -64,8 +78,26 @@ def index(request):
     }, context_instance=RequestContext(request))
 
 
-def record(request, record_id):
+def record_detail(request, record_id):
     record = get_object_or_404(DebugLogRecord, pk=record_id)
-    return render_to_response("debug_logging/record.html", {
+    return render_to_response("debug_logging/record_detail.html", {
         'record': record,
     }, context_instance=RequestContext(request))
+
+
+def start_run(request):
+    details = {}
+    panels = settings.DEBUG_TOOLBAR_PANELS
+    if 'debug_logging.panels.identity.IdentityLoggingPanel' in panels:
+        details['project_name'] = get_project_name()
+        details['hostname'] = get_hostname()
+    if 'debug_logging.panels.revision.RevisionLoggingPanel' in panels:
+        details['revision'] = get_revision()
+    
+    details['start'] = datetime.now()
+    
+    test_run = TestRun(**details)
+    test_run.save()
+    
+    json_data = simplejson.dumps(test_run, cls=DjangoJSONEncoder)
+    return HttpResponse(json_data, content_type='application/json')

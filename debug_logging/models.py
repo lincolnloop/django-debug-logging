@@ -1,3 +1,4 @@
+from django.core.urlresolvers import reverse
 from django.db import models
 from picklefield.fields import PickledObjectField
 
@@ -5,7 +6,7 @@ from picklefield.fields import PickledObjectField
 class TestRun(models.Model):
     """Captures overall statistics about a single test run."""
     start = models.DateTimeField()
-    end = models.DateTimeField()
+    end = models.DateTimeField(blank=True, null=True)
     
     project_name = models.CharField(max_length=255, blank=True, null=True)
     hostname = models.CharField(max_length=255, blank=True, null=True)
@@ -29,6 +30,9 @@ class TestRun(models.Model):
     
     def __unicode__(self):
         return u'TestRun started on %s' % self.start
+    
+    def get_absolute_url(self):
+        return reverse('run_detail', args=[self.id])
 
 
 class DebugLogRecord(models.Model):
