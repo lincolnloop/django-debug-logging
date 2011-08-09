@@ -1,7 +1,7 @@
 from django.conf import settings
 from django.utils.translation import ugettext_lazy as _
+from debug_logging.utils import get_revision
 from debug_toolbar.panels import DebugPanel
-from debug_toolbar.utils import get_revision
 
 
 class RevisionLoggingPanel(DebugPanel):

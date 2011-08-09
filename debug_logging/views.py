@@ -8,6 +8,7 @@ from django.http import HttpResponse
 from django.shortcuts import get_object_or_404, render_to_response
 from django.template import RequestContext
 from django.utils import simplejson
+from django.views.decorators.http import require_POST
 
 from debug_logging.forms import DateRangeForm
 from debug_logging.models import DebugLogRecord, TestRun
@@ -85,7 +86,11 @@ def record_detail(request, record_id):
     }, context_instance=RequestContext(request))
 
 
+@require_POST
 def start_run(request):
+    if not request.is_ajax():
+        return HttpResponse(status=403)
+    
     details = {}
     panels = settings.DEBUG_TOOLBAR_PANELS
     if 'debug_logging.panels.identity.IdentityLoggingPanel' in panels:

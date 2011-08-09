@@ -1,6 +1,6 @@
 /* Handles expandable elements */
 
-$(document).ready(function() {
+$(function() {
   $('.expandable').each(function() {
     $(this).hide();
     $('<a class="expandlink">Expand</a>').insertBefore(this).click(function() {

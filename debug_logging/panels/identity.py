@@ -2,8 +2,8 @@ from django.conf import settings
 from django.utils.translation import ugettext_lazy as _
 from django.utils.importlib import import_module
 
+from debug_logging.utils import get_project_name, get_hostname
 from debug_toolbar.panels import DebugPanel
-from debug_toolbar.utils import get_project_name, get_hostname
 
 
 class IdentityLoggingPanel(DebugPanel):

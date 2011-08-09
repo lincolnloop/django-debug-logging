@@ -1,6 +1,6 @@
 /* Handles highlights */
 
-$(document).ready(function() {
+$(function() {
   function highlight_results() {
     time = parseFloat($('#time-threshold').val());
     queries = parseInt($('#sql-threshold').val());
