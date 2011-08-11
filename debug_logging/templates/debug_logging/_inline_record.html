@@ -7,7 +7,7 @@
     </span>
     <h3>
       {% if not record_class %}
-        <a href="{% url debug-logging:record_detail record.id %}">
+        <a href="{% url debug_logging_record_detail record.id %}">
           {{ record.request_path}}
         </a>
       {% else %}
@@ -32,6 +32,6 @@
         </span>
     </p>
     {% if not record_class %}
-      <a href="{% url debug-logging:record_detail record.id %}" class="row_link"></a>
+      <a href="{% url debug_logging_record_detail record.id %}" class="row_link"></a>
     {% endif %}
 </li>

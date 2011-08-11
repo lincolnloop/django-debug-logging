@@ -40,7 +40,7 @@ class DebugLoggingMiddleware(DebugToolbarMiddleware):
             
             # If the debug-logging frontend is in use, add it to the blacklist
             try:
-                debug_logging_prefix = reverse('debug-logging:index')
+                debug_logging_prefix = reverse('debug_logging_index')
                 blacklist.append(debug_logging_prefix)
             except NoReverseMatch:
                 pass

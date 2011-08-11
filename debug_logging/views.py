@@ -17,7 +17,7 @@ def index(request):
     }, context_instance=RequestContext(request))
 
 
-def run_detail(request):
+def run_detail(request, run_id):
     from_date = DateRangeForm.DEFAULT_FROM_DATE
     to_date = DateRangeForm.DEFAULT_TO_DATE
     sort = None

@@ -32,7 +32,7 @@ class TestRun(models.Model):
         return u'TestRun started on %s' % self.start
     
     def get_absolute_url(self):
-        return reverse('run_detail', args=[self.id])
+        return reverse('debug_logging_run_detail', args=[self.id])
 
 
 class DebugLogRecord(models.Model):

@@ -10,8 +10,7 @@ problems.
 
 It also provides a basic UI for browsing the details that have been logged to
 the database and reviewing aggregated information about test runs.  The UI
-borrows a lot from Sentry_, which is a fantastic app for logging errors to the
-database.
+borrows a lot from the custom Sphinx theme by the Read the Docs team.
 
 The overall goal is to use this tool to monitor performance statistics over
 time, so that you can see trends and spikes in the number of queries, cache
@@ -55,9 +54,6 @@ Prerequisites
 `Django Debug Toolbar`_ - This project is designed to work alongside the Django
 Debug Toolbar and extend its functionality to support logging.
 
-Nexus_ - This is a pluggable admin app created by the Disqus team.  It is used
-to present the UI for reviewing your debug logs.
-
 Picklefield_ - Used to saved pickled versions of settings, sql queries, and
 cache calls to the database.
 
@@ -71,14 +67,13 @@ Install the project with pip::
 
     $ pip install django-debug-logging
 
-This should install Nexus and django-picklefield as well, which are needed.
+This should install django-picklefield as well, which is needed.
 
-Next, you'll add *debug_logging* and *nexus* to your INSTALLED_APPS::
+Next, you'll add *debug_logging* to your INSTALLED_APPS::
 
     INSTALLED_APPS = (
         ...
         'debug_logging',
-        'nexus',
     )
 
 Now, you'll need to replace the standard DebugToolbarMiddleware with a
@@ -117,6 +112,16 @@ add them to your DEBUG_TOOLBAR_PANELS setting::
 
     'debug_logging.panels.revision.RevisionLoggingPanel',
     'debug_logging.panels.identity.IdentityLoggingPanel',
+
+Add the debug logging urls to your urls.py::
+
+    urlpatterns = patterns('',
+        ...
+        url(r'^debug-logging/', include('debug_logging.urls')),
+    )
+    
+The Debug Logger will ignore requests made to this frontend interface, so your
+log won't be clogged with information you have no use for.
 
 Finally, run syncdb to create the models for statistic logging::
 
@@ -172,26 +177,8 @@ Unless it is run with a verbosity of 0 the command will output status
 messages, such as urls that return codes other than 200 and urls that raise
 errors.
 
-Interface
----------
-
-The frontend interface uses the Nexus_ project from the Disqus team.  Once
-Nexus is installed, make sure you add *nexus/* to your urls::
-
-    (r'^nexus/', include(nexus.site.urls)),
-
-Nexus should autodetect debug-logging, and the interface should be available
-at::
-
-    /nexus/debug-logging/
-
-The Debug Logger will ignore requests made to this frontend interface, so your
-log won't be clogged with information you have no use for.
-
 To Do
 -----
-
-* Create a UI that is more user-friendly and not dependent on Nexus.
 
 * Create a model to group log records into 'runs', capturing start date and end
   date and aggregated stats.  This will make it easier to run your url test
