@@ -14,18 +14,7 @@
     <div class="related">
       <h3>Navigation</h3>
       <ul>
-        {% block nav_right %}
-          {# <li class="right" style="margin-right: 10px"> #}
-          {#   <a href="genindex.html" title="General Index" #}
-          {#      accesskey="I">index</a></li> #}
-          {# <li class="right" > #}
-          {#   <a href="py-modindex.html" title="Python Module Index" #}
-          {#      >modules</a> |</li> #}
-          {# <li class="right" > #}
-          {#   <a href="quickstart.html" title="Quick start guide" #}
-          {#      accesskey="N">next</a> |</li> #}
-        {% endblock %}
-        <li><a href="{% url debug_logging_index %}">Debug Logging</a> &raquo;</li>
+        <li><a href="{% url debug_logging_index %}">Debug Logging</a></li>
         {% block breadcrumbs %}{% endblock %}
       </ul>
     </div>

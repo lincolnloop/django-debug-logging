@@ -63,6 +63,7 @@ def run_detail(request, run_id):
 def record_detail(request, record_id):
     record = get_object_or_404(DebugLogRecord, pk=record_id)
     return render_to_response("debug_logging/record_detail.html", {
+        'test_run': record.test_run,
         'record': record,
         'all_test_runs': _get_all_test_runs(),
     }, context_instance=RequestContext(request))

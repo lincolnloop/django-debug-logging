@@ -1,9 +1,9 @@
 {% extends "debug_logging/base.html" %}
 
-{% block title %}Test Run{% endblock %}
+{% block title %}Test Run: {{ test_run.start }}{% endblock %}
 
 {% block breadcrumbs %}
-  <li><a href="{% url debug_logging_run_detail test_run.id %}">Test Run: {{ test_run.start }}</a> &raquo;</li>
+  <li><a href="{% url debug_logging_run_detail test_run.id %}">Test Run: {{ test_run.start }}</a></li>
 {% endblock %}
 
 {% block body %}
