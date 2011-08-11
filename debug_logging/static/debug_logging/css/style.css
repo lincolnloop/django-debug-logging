@@ -9,6 +9,38 @@
 
 @import url("rtd.css");
 
+.button {
+    cursor: pointer;
+    background-color: #697983;
+    font-size: 0.8em;
+    font-weight: bold;
+    line-height: 1.75em;
+    color: #fff;
+    margin: 0;
+    padding: 0.4em 0.8em;
+    border: none;
+    border-radius: 3px;
+    -webkit-border-radius: 3px;
+    -moz-border-radius: 3px;
+    text-shadow: 0 1px rgba(0, 0, 0, 0.5);
+}
+
+.button:hover {
+    background-color: #8ca1af;
+    color: #fff;
+    text-decoration: none;
+    border-bottom: none;
+}
+
+.button tt {
+    background: inherit !important;
+    color: inherit !important;
+}
+
+.footer {
+    margin-top: 1em;
+}
+
 /* INDEX ------------------------------------------------------------------ */
 
 
@@ -27,3 +59,132 @@
 .expandlink {
     margin-right: 1em;
 }
+
+/* --- CSS taken (and somewhat modified) from Django-Sentry --- */
+
+/* messages generic */
+.count { background: #000; -moz-border-radius: 5px; -webkit-border-radius: 5px; border-radius: 5px; padding: 0 5px; margin-right: 3px; line-height: 19px; color: #fff; display: inline-block; }
+.count-digits-4 { font-size: 0.8em; }
+.count-digits-5 { font-size: 0.7em; }
+
+/* message list */
+.messages {
+    list-style: none;
+    margin-left: 0;
+    -webkit-padding-start: 0;
+}
+.messages li { list-style: none; }
+.messages .no-messages {
+    font-weight: bold;
+}
+.messages .count {
+/*    width: 28px;*/
+    vertical-align: top;
+    text-align: center;
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+    border-radius: 5px;
+    padding: 4px;
+    line-height: 19px;
+    color: #fff;
+    display: inline-block;
+    margin-right: 5px;
+}
+.messages .count a { text-decoration: none; }
+.messages h3 {
+    vertical-align: middle;
+    font-weight: bold;
+    line-height: 24px;
+    display: inline-block;
+    margin: 0;
+    max-width: 80%;
+}
+.messages h3 a { text-decoration: none; }
+.messages .message {
+    color: #666;
+    margin-top: 8px;
+    font-size: 0.9em;
+    margin-bottom: 0;
+    overflow: hidden;
+    white-space: nowrap;
+}
+
+.messages .tag { display: inline-block; padding: 2px 5px; background: #eaeaea; margin-right: 5px;}
+.messages .tag.warn { background: #CF070F; color: white;}
+.messages .traceback { display: none; }
+.messages li {
+    padding: 8px;
+    position: relative;
+    padding-right: 50px;
+    overflow: hidden;
+    margin-bottom: 1em;
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+    border-radius: 5px;
+}
+.messages .row1 { background: #f9f9f9; }
+.messages .hidden {
+    position: absolute;
+    right: 15px;
+    top: 21px;
+    visibility: hidden;;
+}
+.messages li:hover .hidden {
+    visibility: visible;
+}
+
+.messages .row_link {
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    position: absolute;
+}
+
+.messages .last_seen {
+    color: #bbb;
+    font-size: 0.9em;
+    margin-left: 5px;
+    white-space: nowrap;
+    vertical-align: middle;
+    display: inline-block;
+}
+.messages .status { margin-left: 5px; text-transform: uppercase; font-size: 0.9em; }
+.messages .status-0 { display: none; }
+.messages .status-1 { color: red; }
+.messages li:hover, .messages .active {
+    background: #eaeaea;
+}
+.messages li:hover .tag { background: #fff; }
+.messages li:hover .tag.warn { background: #F10710; }
+.messages li:hover h3 a {
+    color: #0099dc;
+}
+.messages li:hover .last_seen, .messages .active .last_seen { color: #777; }
+
+.priority-veryhigh .count {
+    background: #e22e2e;
+    -webkit-box-shadow: 0 1px 2px rgba(0,0,0,.2);
+    -moz-box-shadow: 0 1px 2px rgba(0,0,0,.2);
+    box-shadow: 0 1px 2px rgba(0,0,0,.2);
+    background:-moz-linear-gradient(center top , #ED1C24, #AA1317) repeat scroll 0 0 transparent;
+    background:-webkit-gradient(linear, 0% 0%, 0% 100%, from(#ED1C24), to(#AA1317));
+}
+.priority-high .count {
+    background: #ff5400;
+    background:-moz-linear-gradient(center top , #F16C7C, #BF404F) repeat scroll 0 0 transparent;
+    background:-webkit-gradient(linear, 0% 0%, 0% 100%, from(#F16C7C), to(#BF404F));
+}
+.priority-medium .count {
+    background: #ff7800;
+    background:-moz-linear-gradient(center top , #FAA51A, #F47A20) repeat scroll 0 0 transparent;
+    background:-webkit-gradient(linear, 0% 0%, 0% 100%, from(#FAA51A), to(#F47A20));
+}
+.priority-low .count,
+.priority-verylow .count {
+    background: #ffb400;
+    background:-moz-linear-gradient(center top , #efd57c, #e0ae00) repeat scroll 0 0 transparent;
+    background:-webkit-gradient(linear, 0% 0%, 0% 100%, from(#efd57c), to(#e0ae00));
+}
+
+/* --- End CSS taken from Django-Sentry --- */

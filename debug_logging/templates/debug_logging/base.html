@@ -1,4 +1,4 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en" class="no-js">
 <head>
 	<meta charset="UTF-8">
@@ -14,16 +14,19 @@
     <div class="related">
       <h3>Navigation</h3>
       <ul>
-        <li class="right" style="margin-right: 10px">
-          <a href="genindex.html" title="General Index"
-             accesskey="I">index</a></li>
-        <li class="right" >
-          <a href="py-modindex.html" title="Python Module Index"
-             >modules</a> |</li>
-        <li class="right" >
-          <a href="quickstart.html" title="Quick start guide"
-             accesskey="N">next</a> |</li>
-        <li><a href="#">Django Debug Logging</a> &raquo;</li> 
+        {% block nav_right %}
+          {# <li class="right" style="margin-right: 10px"> #}
+          {#   <a href="genindex.html" title="General Index" #}
+          {#      accesskey="I">index</a></li> #}
+          {# <li class="right" > #}
+          {#   <a href="py-modindex.html" title="Python Module Index" #}
+          {#      >modules</a> |</li> #}
+          {# <li class="right" > #}
+          {#   <a href="quickstart.html" title="Quick start guide" #}
+          {#      accesskey="N">next</a> |</li> #}
+        {% endblock %}
+        <li><a href="{% url debug_logging_index %}">Debug Logging</a> &raquo;</li>
+        {% block breadcrumbs %}{% endblock %}
       </ul>
     </div>
     
@@ -31,33 +34,27 @@
       <div class="documentwrapper">
         <div class="bodywrapper">
           <div class="body">
-              {% block body %}{% endblock %}
+            {% block body %}{% endblock %}
           </div>
         </div>
       </div>
       <div class="sphinxsidebar">
         <div class="sphinxsidebarwrapper">
-            {% block sidebar %}{% endblock %}
+          {% block sidebar %}
+          <h3>Test Runs</h3>
+          <ul>
+            {% for run in all_test_runs %}
+              <li><a href="{{ run.get_absolute_url }}">{{ run.start }}</a></li>
+            {% empty %}
+              <li>(none currently available)</li>
+            {% endfor %}
+          </ul>
+          {% endblock %}
         </div>
       </div>
       <div class="clearer"></div>
     </div>
-    <div class="related">
-      <h3>Navigation</h3>
-      <ul>
-        <li class="right" style="margin-right: 10px">
-          <a href="genindex.html" title="General Index"
-             >index</a></li>
-        <li class="right" >
-          <a href="py-modindex.html" title="Python Module Index"
-             >modules</a> |</li>
-        <li class="right" >
-          <a href="quickstart.html" title="Quick start guide"
-             >next</a> |</li>
-        <li><a href="#">Django Debug Logging</a> &raquo;</li> 
-      </ul>
-    </div>
-
+    
     <div class="footer">
       <a href="https://github.com/lincolnloop/django-debug-logging">
         Django Debug Logging

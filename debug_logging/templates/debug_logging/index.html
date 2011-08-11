@@ -6,7 +6,7 @@
   <h1>Django Debug Logging</h1>
   <p>Select a test run below to review the results.</p>
   <h2>Test Runs</h2>
-  {% for run in runs %}
+  {% for run in all_test_runs %}
     <a href="{{ run.get_absolute_url }}">{{ run.start }}</a>
   {% empty %}
     <p>There are no test runs available to review.</p>

@@ -9,29 +9,20 @@ from debug_logging.models import DebugLogRecord, TestRun
 RECORDS_PER_PAGE = 50
 
 
+def _get_all_test_runs():
+    return TestRun.objects.all()
+
+
 def index(request):
-    runs = TestRun.objects.all()
-    
     return render_to_response("debug_logging/index.html", {
-        'runs': runs,
+        'all_test_runs': _get_all_test_runs(),
     }, context_instance=RequestContext(request))
 
 
 def run_detail(request, run_id):
-    from_date = DateRangeForm.DEFAULT_FROM_DATE
-    to_date = DateRangeForm.DEFAULT_TO_DATE
-    sort = None
-    if request.GET:
-        form = DateRangeForm(data=request.GET)
-        if form.is_valid():
-            if form.cleaned_data.get('from_date'):
-                from_date = form.cleaned_data['from_date']
-            if form.cleaned_data.get('to_date'):
-                to_date = form.cleaned_data['to_date']
-        
-        sort = request.GET.get('sort')
-    else:
-        form = DateRangeForm()
+    test_run = get_object_or_404(TestRun, id=run_id)
+    
+    sort = request.GET.get('sort')
     
     if sort == 'response_time':
         order_by = '-timer_total'
@@ -43,8 +34,7 @@ def run_detail(request, run_id):
         order_by = '-timestamp'
     
     records = DebugLogRecord.objects.filter(
-        timestamp__gte=from_date,
-        timestamp__lte=to_date,
+        test_run=test_run,
     ).order_by(order_by)
     
     aggregates = records.aggregate(
@@ -63,11 +53,10 @@ def run_detail(request, run_id):
     page = p.page(page_num)
     
     return render_to_response("debug_logging/run_detail.html", {
-        'form': form,
         'page': page,
-        'from_date': from_date,
-        'to_date': to_date,
         'aggregates': aggregates,
+        'test_run': test_run,
+        'all_test_runs': _get_all_test_runs(),
     }, context_instance=RequestContext(request))
 
 
@@ -75,4 +64,5 @@ def record_detail(request, record_id):
     record = get_object_or_404(DebugLogRecord, pk=record_id)
     return render_to_response("debug_logging/record_detail.html", {
         'record': record,
+        'all_test_runs': _get_all_test_runs(),
     }, context_instance=RequestContext(request))
