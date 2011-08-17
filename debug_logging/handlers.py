@@ -14,7 +14,11 @@ class DBHandler(logging.Handler):
                     filters[key] = record.msg.pop(key)
             
             # Find the open test run for this project
-            test_run = TestRun.objects.get(end__isnull=True, **filters)
+            try:
+                test_run = TestRun.objects.get(end__isnull=True, **filters)
+            except TestRun.DoesNotExist:
+                # Don't log this request if there isn't an open TestRun
+                return
             record.msg['test_run'] = test_run
             
             instance = DebugLogRecord(**record.msg)

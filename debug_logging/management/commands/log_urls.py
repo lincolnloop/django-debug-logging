@@ -10,6 +10,19 @@ class Command(BaseCommand):
     help = 'Hit a list of urls in sequence so that the requests will be logged'
     args = "url_list [url_list ...]"
     
+    option_list = BaseCommand.option_list + (
+        make_option('--manual-start',
+            action='store_true',
+            dest='manual_start',
+            help='Manually start a TestRun without actually logging any urls.'
+        ),
+        make_option('--manual-end',
+            action='store_true',
+            dest='manual_end',
+            help='End a TestRun that was started manually.'
+        ),
+    )
+    
     def status_update(self, msg):
         if not self.quiet:
             print msg
@@ -41,13 +54,32 @@ class Command(BaseCommand):
         # Check to see if there is already a TestRun object open
         existing_run = TestRun.objects.filter(end__isnull=True, **filters)
         if existing_run:
-            # If so, close it so that we can open a new one
+            if options['manual_start']:
+                # If the --manual-start option was specified, error out because
+                # there is already an open TestRun
+                raise CommandError('There is already an open TestRun.')
+            
+            # Otherwise, close it so that we can open a new one
             existing_run.end = datetime.now()
             existing_run.save()
+            
+            if options['manual_end']:
+                # If the --manual-end option was specified, we can now exit
+                self.status_update('The TestRun was successfully closed.')
+                return
+        if options['manual_end']:
+            # The --manual-end option was specified, but there was no existing
+            # run to close.
+            raise CommandError('There is no open TestRun to end.')
         
         filters['start'] = datetime.now()
         test_run = TestRun(**filters)
         test_run.save()
+        
+        if options['manual_start']:
+            # The TestRun was successfully created
+            self.status_update('A new TestRun was successfully opened.')
+            return
         
         urls = []
         for url_list in url_lists:
