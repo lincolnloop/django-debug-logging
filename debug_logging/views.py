@@ -3,7 +3,6 @@ from django.db.models import Avg, Max
 from django.shortcuts import get_object_or_404, render_to_response
 from django.template import RequestContext
 
-from debug_logging.forms import DateRangeForm
 from debug_logging.models import DebugLogRecord, TestRun
 
 RECORDS_PER_PAGE = 50
