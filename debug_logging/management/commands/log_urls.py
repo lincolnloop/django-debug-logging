@@ -1,6 +1,7 @@
 from __future__ import with_statement
-from datetime import datetime
 import sys
+from datetime import datetime
+from optparse import  make_option
 
 from django.test.client import Client
 from django.core.management.base import BaseCommand, CommandError
