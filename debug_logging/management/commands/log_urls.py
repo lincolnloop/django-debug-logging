@@ -85,16 +85,17 @@ class Command(BaseCommand):
             filters['revision'] = get_revision()
         
         # Check to see if there is already a TestRun object open
-        existing_run = TestRun.objects.filter(end__isnull=True, **filters)
-        if existing_run:
+        existing_runs = TestRun.objects.filter(end__isnull=True, **filters)
+        if existing_runs:
             if options['manual_start']:
                 # If the --manual-start option was specified, error out because
                 # there is already an open TestRun
                 raise CommandError('There is already an open TestRun.')
             
             # Otherwise, close it so that we can open a new one
-            existing_run.end = datetime.now()
-            existing_run.save()
+            for existing_run in existing_runs:
+                existing_run.end = datetime.now()
+                existing_run.save()
             
             if options['manual_end']:
                 # If the --manual-end option was specified, we can now exit
