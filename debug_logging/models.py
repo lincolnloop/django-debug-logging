@@ -8,6 +8,9 @@ class TestRun(models.Model):
     start = models.DateTimeField()
     end = models.DateTimeField(blank=True, null=True)
     
+    name = models.CharField(max_length=255, blank=True, null=True)
+    description = models.TextField(blank=True, null=True)
+    
     project_name = models.CharField(max_length=255, blank=True, null=True)
     hostname = models.CharField(max_length=255, blank=True, null=True)
     revision = models.CharField(max_length=40, blank=True, null=True)

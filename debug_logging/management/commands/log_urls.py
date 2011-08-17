@@ -11,15 +11,39 @@ class Command(BaseCommand):
     args = "url_list [url_list ...]"
     
     option_list = BaseCommand.option_list + (
-        make_option('--manual-start',
+        make_option('-s', '--manual-start',
             action='store_true',
             dest='manual_start',
             help='Manually start a TestRun without actually logging any urls.'
         ),
-        make_option('--manual-end',
+        make_option('-e', '--manual-end',
             action='store_true',
             dest='manual_end',
             help='End a TestRun that was started manually.'
+        ),
+        make_option('-n', '--name',
+            action='store',
+            dest='name',
+            metavar='NAME',
+            help='Add a name to the test run.'
+        ),
+        make_option('-d', '--description',
+            action='store',
+            dest='description',
+            metavar='DESC',
+            help='Add a description to the test run.'
+        ),
+        make_option('-u', '--username',
+            action='store',
+            dest='username',
+            metavar='USERNAME',
+            help='Run the test authenticated with the USERNAME provided.'
+        ),
+        make_option('-p', '--password',
+            action='store',
+            dest='password',
+            metavar='PASSWORD',
+            help='Run the test authenticated with the PASSWORD provided.'
         ),
     )
     
@@ -41,6 +65,14 @@ class Command(BaseCommand):
         verbosity = int(options.get('verbosity', 1))
         self.quiet = verbosity < 1
         self.verbose = verbosity > 1
+        
+        # Check for a username without a password, or vice versa
+        if options['username'] and not options['password']:
+            raise CommandError('If a username is provided, a password must '
+                               'also be provided.')
+        if options['password'] and not options['username']:
+            raise CommandError('If a password is provided, a username must '
+                               'also be provided.')
         
         # Create a TestRun object to track this run
         filters = {}
@@ -74,6 +106,12 @@ class Command(BaseCommand):
         
         filters['start'] = datetime.now()
         test_run = TestRun(**filters)
+        
+        if options['name']:
+            test_run.name = options['name']
+        if options['description']:
+            test_run.description = options['description']
+        
         test_run.save()
         
         if options['manual_start']:
@@ -90,6 +128,10 @@ class Command(BaseCommand):
         self.status_update('Beginning debug logging run...')
         
         client = Client()
+        
+        if options['username'] and options['password']:
+            client.login(username=options['username'],
+                         password=options['password'])
         
         for url in urls:
             try:
