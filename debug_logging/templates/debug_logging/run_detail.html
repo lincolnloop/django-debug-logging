@@ -1,56 +1,67 @@
 {% extends "debug_logging/base.html" %}
 
-{% block title %}Test Run: {{ test_run.start }}{% endblock %}
+{% block title %}Test Run: {{ test_run }}{% endblock %}
 
 {% block breadcrumbs %}
-  <li><a href="{% url debug_logging_run_detail test_run.id %}">Test Run: {{ test_run.start }}</a></li>
+  <li>&raquo;<a href="{% url debug_logging_run_detail test_run.id %}">Test Run: {{ test_run }}</a></li>
 {% endblock %}
 
-{% block body %}
-  <h1>Test Run: {{ test_run.start }}</h1>
+{% block sidebar %}
   <div class="aggregation">
     <h3>Aggregated stats:</h3>
-    <table class="vars expandable">
-      <thead>
-        <th>Statistic</th><th>Value</th>
+    <table>
       <tbody>
         <tr>
           <td>Avg Elapsed Time</td>
-          <td>{{ aggregates.timer_total__avg|floatformat:"-2" }} ms</td>
+          <td>{{ test_run.avg_time|floatformat:"-2" }} ms</td>
         </tr>
         <tr>
           <td>Avg CPU Time</td>
-          <td>{{ aggregates.timer_cputime__avg|floatformat:"-2" }} ms</td>
+          <td>{{ test_run.avg_cpu_time|floatformat:"-2" }} ms</td>
         </tr>
         <tr>
           <td>Avg SQL Time</td>
-          <td>{{ aggregates.sql_time__avg|floatformat:"-2" }} ms</td>
+          <td>{{ test_run.avg_sql_time|floatformat:"-2" }} ms</td>
         </tr>
         <tr>
-          <td>Avg SQL Queries</td>
-          <td>{{ aggregates.sql_num_queries__avg|floatformat:"-2" }}</td>
+          <td>Avg Queries</td>
+          <td>{{ test_run.avg_sql_queries|floatformat:"-2" }}</td>
         </tr>
         <tr>
-          <td>Max SQL Queries</td>
-          <td>{{ aggregates.sql_num_queries__max }}</td>
+          <td>Max Queries</td>
+          <td>{{ test_run.max_sql_queries }}</td>
+        </tr>
+        <tr>
+          <td>Total Queries</td>
+          <td>{{ test_run.total_sql_queries }}</td>
         </tr>
       </tbody>
     </table>
     <h3>Sort by:</h3>
-    <div class="resultfilter expandable">
-      <a href="?p={{ page.number }}">Timestamp</a> |
-      <a href="?p={{ page.number }}&amp;sort=response_time">Response time</a> |
-      <a href="?p={{ page.number }}&amp;sort=sql_queries">Sql queries</a> |
-      <a href="?p={{ page.number }}&amp;sort=sql_time">Sql time</a>
+    <div id="resultfilter">
+      <ul>
+        <li><a href="?p={{ page.number }}">Timestamp</a></li>
+        <li><a href="?p={{ page.number }}&amp;sort=response_time">Response time</a></li>
+        <li><a href="?p={{ page.number }}&amp;sort=sql_queries">Sql queries</a></li>
+        <li><a href="?p={{ page.number }}&amp;sort=sql_time">Sql time</a></li>
+      </ul>
     </div>
     <h3>Highlight thresholds:</h3>
-    <div class="resultfilter expandable">
-      <label for="time-threshold">Response time:</label>
-      <input type="text" id="time-threshold" value="3000">
-      <label for="sql-threshold">SQL queries:</label>
-      <input type="text" id="sql-threshold" value="200">
+    <div id="thresholds">
+      <p>
+        <label for="time-threshold">Response time:</label>
+        <input type="text" id="time-threshold" value="3000">
+      </p>
+      <p>
+        <label for="sql-threshold">SQL queries:</label>
+        <input type="text" id="sql-threshold" value="200">
+      </p>
     </div>
   </div>
+{% endblock %}
+
+{% block body %}
+  <h1>Test Run: {{ test_run }}</h1>
   
   <ul class="messages">
     {% for record in page.object_list %}

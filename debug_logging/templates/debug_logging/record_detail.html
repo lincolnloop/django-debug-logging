@@ -3,8 +3,17 @@
 {% block title %}Log Record: {{ record.request_path }}{% endblock %}
 
 {% block breadcrumbs %}
-  <li><a href="{% url debug_logging_run_detail test_run.id %}">Test Run: {{ test_run.start }}</a> &raquo;</li>
-  <li><a href="{% url debug_logging_record_detail record.id %}">Log Record: {{ record.request_path }}</a></li>
+  <li>&raquo;<a href="{% url debug_logging_run_detail test_run.id %}">Test Run: {{ test_run }}</a></li>
+  <li>&raquo;<a href="{% url debug_logging_record_detail record.id %}">Log Record: {{ record.request_path }}</a></li>
+{% endblock %}
+
+{% block sidebar %}
+  <h3>Project</h3>
+  <p>{{ record.test_run.project_name|default:"(Not recorded)" }}</p>
+  <h3>Hostname</h3>
+  <p>{{ record.test_run.hostname|default:"(Not recorded)" }}
+  <h3>Revision</h3>
+  <p>{{ record.test_run.revision|default:"(Not recorded)" }}
 {% endblock %}
 
 {% block body %}
@@ -15,11 +24,7 @@
   </ul>
   
   <table class="recordinfo"><tbody>
-    <tr><th class="key">TIMESTAMP</th><td class="values">{{ record.timestamp|date:"M dS, g:m:s a" }}</td></tr>
-    <tr><th class="key">PROJECT</th><td class="values">{{ record.project_name }}</td></tr>
-    <tr><th class="key">HOSTNAME</th><td class="values">{{ record.hostname }}</td></tr>
     <tr><th class="key">REQUEST PATH</th><td>{{ record.request_path }}</td></tr>
-    <tr><th class="key">REVISION</th><td>{{ record.revision }}</td></tr>
     <tr><th class="key">SETTINGS</th>
       <td>
         <table class="vars expandable">

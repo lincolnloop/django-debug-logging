@@ -49,17 +49,12 @@
 
 /* LOG RUNS --------------------------------------------------------------- */
 
-.aggregation {
-    clear: both;
-    padding-top: 1em;
-}
-
-.aggregation h3 {
-    display: inline;
-}
-
 .expandlink {
     margin-right: 1em;
+}
+
+#thresholds input {
+    float: none;
 }
 
 /* --- CSS taken (and somewhat modified) from Django-Sentry --- */

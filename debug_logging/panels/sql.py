@@ -41,7 +41,6 @@ class SQLLoggingPanel(SQLDebugPanel):
             
             for alias, query in self._queries:
                 query['alias'] = alias
-                query['sql'] = reformat_sql(query['sql'])
             
             stats = {}
             
