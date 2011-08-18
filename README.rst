@@ -10,13 +10,14 @@ problems.
 
 It also provides a basic UI for browsing the details that have been logged to
 the database and reviewing aggregated information about test runs.  The UI
-borrows a lot from the custom Sphinx theme by the Read the Docs team.
+borrows a lot from the custom Sphinx theme by the Read the Docs team, and the
+Sentry project from Disqus.
 
 The overall goal is to use this tool to monitor performance statistics over
 time, so that you can see trends and spikes in the number of queries, cache
 misses, cpu time, etc., and identify where in the app the problems are coming
-from. It is not intended as a load testing tool (yet), so features like
-concurrency and warmup periods will not be part of the initial focus.
+from. It is not intended as a load testing tool, so features like concurrency
+and warmup periods will not be part of the initial focus.
 
 Screenshots
 -----------
@@ -73,6 +74,7 @@ Next, you'll add *debug_logging* to your INSTALLED_APPS::
 
     INSTALLED_APPS = (
         ...
+        'debug_toolbar',
         'debug_logging',
     )
 
@@ -130,18 +132,18 @@ Finally, run syncdb to create the models for statistic logging::
 South migrations are included in case migrations are needed when upgrading to
 new versions.
 
-**If logging is enabled, any request to your site will result in a new row in
-the logging table.** You probably don't want to enable it during regular
-day-to-day development.
-
 To enable logging, create a DEBUG_LOGGING_CONFIG setting that looks like this::
 
     DEBUG_LOGGING_CONFIG = {
         'ENABLED': True,
     }
 
-To prevent any performance impact from the rendering of the Debug
-Toolbar, it is not shown.
+To prevent any performance impact from the rendering of the Debug Toolbar, it
+is not shown.
+
+When logging is enabled, requests generated while there is an active test run
+will create debug log records.  For the best results, don't use the site while
+a test run is in progress.
 
 Settings
 --------
@@ -167,7 +169,14 @@ Running a Url Test
 A management command is included that uses the test client to hit a list of
 urls in sequence, allowing them to be logged to the database.  To use it, first
 create a list of urls with a new url on each line.  Lines beginning with # are
-ignored.
+ignored. ::
+    
+    # Main urls
+    /
+    /my/url/
+    /my/other/url/
+    # Comments
+    /my/comment/url/
 
 Then, enable logging and run the *log_urls* management command::
 
@@ -177,12 +186,28 @@ Unless it is run with a verbosity of 0 the command will output status
 messages, such as urls that return codes other than 200 and urls that raise
 errors.
 
+To run the test as an authenticated user, use the username and password
+options::
+
+    $ python manage.py log_urls my_urls.txt --username Legen --password dary
+
+You can also add a name and a description to your run, if you'd like::
+
+    $ python manage.py log_urls my_urls.txt --name "Admin Urls" --description "Urls used by site admins"
+
+If you'd like to conduct a test run with a tool other than the log_urls
+management command, you can use the command to manually start and end TestRun
+objects, so that your results will be organized correctly in the UI. Before you
+conduct your test, simply run::
+
+    $ python manage.py log_urls --manual-start
+
+Then, when you are finished hitting your desired urls::
+
+    $ python manage.py log_urls --manual-end
+
 To Do
 -----
-
-* Create a model to group log records into 'runs', capturing start date and end
-  date and aggregated stats.  This will make it easier to run your url test
-  repeatedly over time and see the impact of your changes.
 
 * Add a --repeat option to the log_urls command so that the urls can be run
   through multiple times.
@@ -197,8 +222,4 @@ To Do
 
 .. _Django Debug Toolbar: https://github.com/django-debug-toolbar/django-debug-toolbar
 
-.. _Nexus: https://github.com/dcramer/nexus
-
 .. _Picklefield: https://github.com/gintas/django-picklefield
-
-.. _Sentry: https://github.com/dcramer/sentry
