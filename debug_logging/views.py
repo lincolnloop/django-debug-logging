@@ -1,5 +1,5 @@
 from django.core.paginator import Paginator
-from django.db.models import Avg, Max
+
 from django.shortcuts import get_object_or_404, render_to_response
 from django.template import RequestContext
 
@@ -32,19 +32,9 @@ def run_detail(request, run_id):
     else:
         order_by = '-timestamp'
     
-    records = DebugLogRecord.objects.filter(
-        test_run=test_run,
-    ).order_by(order_by)
+    test_run.set_aggregates()
     
-    aggregates = records.aggregate(
-        Avg('timer_total'),
-        Avg('timer_cputime'),
-        Avg('sql_time'),
-        Avg('sql_num_queries'),
-        Max('sql_num_queries'),
-    )
-    
-    p = Paginator(records, RECORDS_PER_PAGE)
+    p = Paginator(test_run.records.order_by(order_by), RECORDS_PER_PAGE)
     try:
         page_num = int(request.GET.get('p', 1))
     except ValueError:
@@ -53,7 +43,6 @@ def run_detail(request, run_id):
     
     return render_to_response("debug_logging/run_detail.html", {
         'page': page,
-        'aggregates': aggregates,
         'test_run': test_run,
         'all_test_runs': _get_all_test_runs(),
     }, context_instance=RequestContext(request))

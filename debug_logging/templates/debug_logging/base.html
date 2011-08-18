@@ -33,7 +33,7 @@
           <h3>Test Runs</h3>
           <ul>
             {% for run in all_test_runs %}
-              <li><a href="{{ run.get_absolute_url }}">{{ run.start }}</a></li>
+              <li><a href="{{ run.get_absolute_url }}">{{ run }}</a></li>
             {% empty %}
               <li>(none currently available)</li>
             {% endfor %}

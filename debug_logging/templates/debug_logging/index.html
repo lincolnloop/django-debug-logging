@@ -6,11 +6,27 @@
   <h1>Django Debug Logging</h1>
   <p>Select a test run below to review the results.</p>
   <h2>Test Runs</h2>
-  {% for run in all_test_runs %}
-    <a href="{{ run.get_absolute_url }}">{{ run.start }}</a>
-  {% empty %}
-    <p>There are no test runs available to review.</p>
-  {% endfor %}
+  <table id="test-run-summaries">
+    <thead>
+      <tr>
+        <th>Name/Date</th><th>Avg. Time</th><th>Avg. Sql Time</th><th>Avg. Queries</th><th>Total Queries</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for run in all_test_runs %}
+      <tr>
+        {{ run.set_aggregates|default:"" }}
+        <td><a href="{{ run.get_absolute_url }}">{{ run }}</a></td>
+        <td>{{ run.avg_time|floatformat:"-2" }}</td>
+        <td>{{ run.avg_sql_time|floatformat:"-2" }}</td>
+        <td>{{ run.avg_sql_queries|floatformat:"-2" }}</td>
+        <td>{{ run.total_sql_queries }}</td>
+      </tr>
+      {% empty %}
+        <td colspan="5">There are no test runs available to review.</td>
+      {% endfor %}
+    </tbody>
+  </table>
 {% endblock %}
 
 {% block extra_js %}
