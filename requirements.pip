@@ -1,2 +1,2 @@
-nexus==0.1.7
+django-debug-toolbar==0.8.5
 django-picklefield==0.1.9

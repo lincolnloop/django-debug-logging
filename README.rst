@@ -52,6 +52,9 @@ A log record:
 Prerequisites
 -------------
 
+These requirements are installed automatically by *pip* and *easy_install*, and
+are in the included *requirements.pip* file.
+
 `Django Debug Toolbar`_ - This project is designed to work alongside the Django
 Debug Toolbar and extend its functionality to support logging.
 
