@@ -47,6 +47,15 @@
     font-size: .8em;
 }
 
+#test-run-summaries th.select-all {
+    font-size: 1em;
+}
+
+#runs-form input[type=submit] {
+    float: none;
+    margin: 10px 1px;
+}
+
 /* LOG RUNS --------------------------------------------------------------- */
 
 .expandlink {

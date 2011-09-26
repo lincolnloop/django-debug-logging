@@ -20,6 +20,7 @@ class TestRun(models.Model):
     # Some of these fields aren't used yet, since they are not represented in
     # the UI.  Once they are added to the UI, they'll be added to the
     # set_aggregates method below.
+    total_requests = models.IntegerField(blank=True, null=True)
     avg_time = models.FloatField(blank=True, null=True)
     total_time = models.FloatField(blank=True, null=True)
     avg_cpu_time = models.FloatField(blank=True, null=True)
@@ -50,37 +51,28 @@ class TestRun(models.Model):
         Sets any aggregates that haven't been generated yet, or recalculates
         them if the force option is indicated.
         """
-        aggregates = []
-
+        aggregates = {}
+        
         if not self.avg_time or force:
-            aggregates.append(models.Avg('timer_total'))
+            aggregates["avg_time"] = models.Avg('timer_total')
         if not self.avg_cpu_time or force:
-            aggregates.append(models.Avg('timer_cputime'))
+            aggregates["avg_cpu_time"] = models.Avg('timer_cputime')
         if not self.avg_sql_time or force:
-            aggregates.append(models.Avg('sql_time'))
+            aggregates["avg_sql_time"] = models.Avg('sql_time')
         if not self.avg_sql_queries or force:
-            aggregates.append(models.Avg('sql_num_queries'))
+            aggregates["avg_sql_queries"] = models.Avg('sql_num_queries')
         if not self.total_sql_queries or force:
-            aggregates.append(models.Sum('sql_num_queries'))
+            aggregates["total_sql_queries"] = models.Sum('sql_num_queries')
         if not self.max_sql_queries or force:
-            aggregates.append(models.Max('sql_num_queries'))
-
+            aggregates["max_sql_queries"] = models.Max('sql_num_queries')
+        if not self.total_requests or force:
+            aggregates["total_requests"] = models.Count('pk')
+        
         if aggregates:
-            aggregated = self.records.aggregate(*aggregates)
-
+            aggregated = self.records.aggregate(**aggregates)
+            
             for key, value in aggregated.items():
-                if key == 'timer_total__avg':
-                    self.avg_time = value
-                elif key == 'timer_cputime__avg':
-                    self.avg_cpu_time = value
-                elif key == 'sql_time__avg':
-                    self.avg_sql_time = value
-                elif key == 'sql_num_queries__avg':
-                    self.avg_sql_queries = value
-                elif key == 'sql_num_queries__sum':
-                    self.total_sql_queries = value
-                elif key == 'sql_num_queries__max':
-                    self.max_sql_queries = value
+                setattr(self, key, value)
 
 
 class DebugLogRecord(models.Model):

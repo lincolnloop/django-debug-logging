@@ -18,27 +18,39 @@
   <h1>Django Debug Logging</h1>
   <p>Select a test run below to review the results.</p>
   <h2>Test Runs</h2>
-  <table id="test-run-summaries">
-    <thead>
-      <tr>
-        <th>Name/Date</th><th>Avg. Time</th><th>Avg. Sql Time</th><th>Avg. Queries</th><th>Total Queries</th>
-      </tr>
-    </thead>
-    <tbody>
-      {% for run in all_test_runs %}
-      <tr>
-        {{ run.set_aggregates|default:"" }}
-        <td><a href="{{ run.get_absolute_url }}">{{ run }}</a></td>
-        <td>{{ run.avg_time|floatformat:"-2" }}</td>
-        <td>{{ run.avg_sql_time|floatformat:"-2" }}</td>
-        <td>{{ run.avg_sql_queries|floatformat:"-2" }}</td>
-        <td>{{ run.total_sql_queries }}</td>
-      </tr>
-      {% empty %}
-        <td colspan="5">There are no test runs available to review.</td>
-      {% endfor %}
-    </tbody>
-  </table>
+  <form method="POST" action="{% url debug_logging_delete_runs %}" id="runs-form">
+    {% csrf_token %}
+    <table id="test-run-summaries">
+      <thead>
+        <tr>
+          <th class="select-all"><input type="checkbox" title="Select all" /></th>
+          <th>Name/Date</th>
+          <th>Total Requests</th>
+          <th>Avg. Time</th>
+          <th>Avg. Sql Time</th>
+          <th>Avg. Queries</th>
+          <th>Total Queries</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for run in all_test_runs %}
+        <tr>
+          {{ run.set_aggregates|default:"" }}
+          <td><input type="checkbox" name="run_id" value="{{ run.pk }}" /></td>
+          <td><a href="{{ run.get_absolute_url }}">{{ run }}</a></td>
+          <td>{{ run.total_requests }}</td>
+          <td>{{ run.avg_time|floatformat:"-2" }}</td>
+          <td>{{ run.avg_sql_time|floatformat:"-2" }}</td>
+          <td>{{ run.avg_sql_queries|floatformat:"-2" }}</td>
+          <td>{{ run.total_sql_queries }}</td>
+        </tr>
+        {% empty %}
+          <td colspan="5">There are no test runs available to review.</td>
+        {% endfor %}
+      </tbody>
+    </table>
+    <input type="submit" value="Delete selected" />
+  </form>
 {% endblock %}
 
 {% block extra_js %}
