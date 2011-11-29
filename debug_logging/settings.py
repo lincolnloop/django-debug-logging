@@ -1,3 +1,6 @@
+import re
+from logging import Handler
+
 from django.conf import settings
 from django.utils.importlib import import_module
 
@@ -19,24 +22,28 @@ DEFAULT_CONFIG = {
     'LOGGED_SETTINGS': DEFAULT_LOGGED_SETTINGS,
 }
 
+# Cache of the logging config.
+_logging_config = None
+
 
 def _get_logging_config():
     """
     Extend the default config with the values provided in settings.py, and then
-    instantiate each of the handlers.
+    conduct some post-processing.
     """
     global _logging_config
     if _logging_config is None:
         _logging_config = dict(DEFAULT_CONFIG,
-                               **settings.get('DEBUG_LOGGING_CONFIG', {}))
+                               **getattr(settings, 'DEBUG_LOGGING_CONFIG', {}))
 
+        # Instantiate the handlers
         handlers = []
         for handler in _logging_config['LOGGING_HANDLERS']:
             if isinstance(handler, Handler):
                 handlers.append(handler())
             elif isinstance(handler, basestring):
-                i = path.rfind('.')
-                module, attr = path[:i], path[i+1:]
+                i = handler.rfind('.')
+                module, attr = handler[:i], handler[i + 1:]
                 try:
                     mod = import_module(module)
                 except ImportError, e:
@@ -51,8 +58,13 @@ def _get_logging_config():
                         'Module "%s" does not define a "%s" handler class'
                         % (module, attr)
                     )
-                handlers.append(instance)
+                handlers.append(instance())
         _logging_config['LOGGING_HANDLERS'] = handlers
+
+        # Compile a regex for logged settings
+        _logging_config['LOGGED_SETTINGS_RE'] = re.compile(
+            '|'.join(_logging_config['LOGGED_SETTINGS'])
+        )
 
     return _logging_config
 

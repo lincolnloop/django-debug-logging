@@ -34,6 +34,7 @@ class DebugLoggingMiddleware(DebugToolbarMiddleware):
 
         if self._logging_enabled(request):
             # If the debug-logging frontend is in use, add it to the blacklist
+            blacklist = request.debug_logging['BLACKLIST']
             try:
                 debug_logging_prefix = reverse('debug_logging_index')
                 blacklist.append(debug_logging_prefix)
@@ -41,7 +42,7 @@ class DebugLoggingMiddleware(DebugToolbarMiddleware):
                 pass
 
             # Don't log requests to urls in the blacklist
-            for blacklist_url in request.debug_logging['BLACKLIST']:
+            for blacklist_url in blacklist:
                 if request.path.startswith(blacklist_url):
                     return response
 

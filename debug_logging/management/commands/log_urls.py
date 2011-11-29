@@ -149,26 +149,28 @@ class Command(BaseCommand):
         for url in urls:
             try:
                 response = client.get(url, DJANGO_DEBUG_LOGGING=True)
-            except KeyboardInterrupt, e:
+            except KeyboardInterrupt as e:
                 if self.has_dbhandler:
                     # Close out the log entry
                     test_run.end = datetime.now()
                     test_run.save()
 
                 raise CommandError('Debug logging run cancelled.')
-            except:
-                if self.verbose:
-                    self.status_update('\nSkipped %s because of an error'
-                                       % url)
-                    continue
+            # except Exception as e:
+            #     if self.verbose:
+            #         self.status_update('\nSkipped %s because of error: %s'
+            #                            % (url, e))
+            #     continue
             if response and response.status_code == 200:
                 self.status_ticker()
             else:
-                try:
-                    self.status_update('\nURL %s responded with code %s'
-                                       % (url, response.status_code))
-                except NameError as e:
-                    self.status_update('\nError on url:%s\n%s\n' % (url, e))
+                if self.verbose:
+                    try:
+                        self.status_update('\nURL %s responded with code %s'
+                                           % (url, response.status_code))
+                    except NameError as e:
+                        self.status_update('\nSkipped %s because of error: %s'
+                                           % (url, e))
 
         if self.has_dbhandler:
             # Close out the log entry
