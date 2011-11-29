@@ -156,11 +156,11 @@ class Command(BaseCommand):
                     test_run.save()
 
                 raise CommandError('Debug logging run cancelled.')
-            # except Exception as e:
-            #     if self.verbose:
-            #         self.status_update('\nSkipped %s because of error: %s'
-            #                            % (url, e))
-            #     continue
+            except Exception as e:
+                if self.verbose:
+                    self.status_update('\nSkipped %s because of error: %s'
+                                       % (url, e))
+                continue
             if response and response.status_code == 200:
                 self.status_ticker()
             else:
