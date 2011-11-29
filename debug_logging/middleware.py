@@ -27,8 +27,9 @@ class DebugLoggingMiddleware(DebugToolbarMiddleware):
         return super(DebugLoggingMiddleware, self)._show_toolbar(request)
 
     def process_request(self, request):
-        if self._logging_enabled(request)
+        if self._logging_enabled(request):
             request.debug_logging = LOGGING_CONFIG
+            request.debug_logging['ENABLED'] = True
         response = super(DebugLoggingMiddleware, self).process_request(request)
 
         if self._logging_enabled(request):
