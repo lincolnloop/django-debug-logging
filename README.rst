@@ -135,25 +135,15 @@ Finally, run syncdb to create the models for statistic logging::
 South migrations are included in case migrations are needed when upgrading to
 new versions.
 
-To enable logging, create a DEBUG_LOGGING_CONFIG setting that looks like this::
+Requests are logged when they contain a 'DJANGO_DEBUG_LOGGING' header set to
+True.  This header is added automatically by the 'log_urls' command when it is
+used.  To prevent any performance impact from the rendering of the Debug Toolbar, it
+is not shown when this header is present.
 
-    DEBUG_LOGGING_CONFIG = {
-        'ENABLED': True,
-    }
-
-To prevent any performance impact from the rendering of the Debug Toolbar, it
-is not shown.
-
-When logging is enabled, requests generated while there is an active test run
-will create debug log records.  For the best results, don't use the site while
-a test run is in progress.
+For the best results, don't use the site while a test run is in progress.
 
 Settings
 --------
-
-* ``ENABLED``: If enabled, the debug logger will log the performance details of
-  each request. The debug toolbar interface will not be shown until logging is
-  disabled again.
 
 * ``SQL_EXTRA``: This setting determines whether the full details of each query
   are logged, or just the number of queries and the total time.  It defaults to
