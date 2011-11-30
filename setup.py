@@ -7,7 +7,7 @@ setup(
     long_description=open('README.rst').read(),
     author='Brandon Konkle',
     author_email='brandon@lincolnloop.com',
-    url='http://lincolnloop.github.com/django-debug-logging/',
+    url='http://github.com/lincolnloop/django-debug-logging/',
     download_url='http://github.com/lincolnloop/django-debug-logging/downloads',
     license='BSD',
     packages=find_packages(exclude=['ez_setup']),

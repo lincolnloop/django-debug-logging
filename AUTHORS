@@ -1,8 +1,12 @@
 The Django Debug Logging project was originally written by Brandon Konkle
 <brandon@lincolnloop.com> for a Lincoln Loop project.
 
-Other contributors will be gladly recognized here once this project begins
-accepting pull requests.  Thank you!
+Other contributors include:
+
+  Yann Malet <yann@lincolnloop.com>
+  Dmitry Chaplinsky <https://github.com/dchaplinsky>
+
+Thank you for your contributions!
 
 The Django Debug Toolbar was originally created by Rob Hudson <rob@cogit8.org>
 in August 2008.  Please see the project page for more information about the
