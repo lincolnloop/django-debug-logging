@@ -23,3 +23,21 @@ def get_revision():
         proc = subprocess.Popen(cmd, stdout=subprocess.PIPE, shell=True)
         proc_stdout, proc_stderr = proc.communicate()
         return proc_stdout
+
+
+def import_from_string(path):
+    i = path.rfind('.')
+    module, attr = path[:i], path[i + 1:]
+    try:
+        mod = import_module(module)
+    except ImportError, e:
+        raise ImproperlyConfigured(
+            'Error importing module %s: "%s"' % (module, e)
+        )
+    try:
+        instance = getattr(mod, attr)
+    except AttributeError:
+        raise ImproperlyConfigured(
+            'Module "%s" does not define a "%s" attribute' % (module, attr)
+        )
+    return instance

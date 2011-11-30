@@ -8,50 +8,14 @@ class Migration(SchemaMigration):
 
     def forwards(self, orm):
         
-        # Deleting field 'DebugLogRecord.settings_pickled'
-        db.delete_column('debug_logging_debuglogrecord', 'settings_pickled')
-
-        # Deleting field 'DebugLogRecord.cache_calls_pickled'
-        db.delete_column('debug_logging_debuglogrecord', 'cache_calls_pickled')
-
-        # Deleting field 'DebugLogRecord.sql_queries_pickled'
-        db.delete_column('debug_logging_debuglogrecord', 'sql_queries_pickled')
-
-        # Adding field 'DebugLogRecord.settings'
-        db.add_column('debug_logging_debuglogrecord', 'settings', self.gf('picklefield.fields.PickledObjectField')(null=True, blank=True), keep_default=False)
-
-        # Adding field 'DebugLogRecord.sql_queries'
-        db.add_column('debug_logging_debuglogrecord', 'sql_queries', self.gf('picklefield.fields.PickledObjectField')(null=True, blank=True), keep_default=False)
-
-        # Adding field 'DebugLogRecord.cache_calls'
-        db.add_column('debug_logging_debuglogrecord', 'cache_calls', self.gf('picklefield.fields.PickledObjectField')(null=True, blank=True), keep_default=False)
-
-        # Changing field 'TestRun.end'
-        db.alter_column('debug_logging_testrun', 'end', self.gf('django.db.models.fields.DateTimeField')(null=True))
+        # Adding field 'TestRun.total_requests'
+        db.add_column('debug_logging_testrun', 'total_requests', self.gf('django.db.models.fields.IntegerField')(null=True, blank=True), keep_default=False)
 
 
     def backwards(self, orm):
         
-        # Adding field 'DebugLogRecord.settings_pickled'
-        db.add_column('debug_logging_debuglogrecord', 'settings_pickled', self.gf('django.db.models.fields.TextField')(null=True, blank=True), keep_default=False)
-
-        # Adding field 'DebugLogRecord.cache_calls_pickled'
-        db.add_column('debug_logging_debuglogrecord', 'cache_calls_pickled', self.gf('django.db.models.fields.TextField')(null=True, blank=True), keep_default=False)
-
-        # Adding field 'DebugLogRecord.sql_queries_pickled'
-        db.add_column('debug_logging_debuglogrecord', 'sql_queries_pickled', self.gf('django.db.models.fields.TextField')(null=True, blank=True), keep_default=False)
-
-        # Deleting field 'DebugLogRecord.settings'
-        db.delete_column('debug_logging_debuglogrecord', 'settings')
-
-        # Deleting field 'DebugLogRecord.sql_queries'
-        db.delete_column('debug_logging_debuglogrecord', 'sql_queries')
-
-        # Deleting field 'DebugLogRecord.cache_calls'
-        db.delete_column('debug_logging_debuglogrecord', 'cache_calls')
-
-        # User chose to not deal with backwards NULL issues for 'TestRun.end'
-        raise RuntimeError("Cannot reverse this migration. 'TestRun.end' and its values cannot be restored.")
+        # Deleting field 'TestRun.total_requests'
+        db.delete_column('debug_logging_testrun', 'total_requests')
 
 
     models = {
@@ -72,7 +36,7 @@ class Migration(SchemaMigration):
             'sql_num_queries': ('django.db.models.fields.IntegerField', [], {'null': 'True', 'blank': 'True'}),
             'sql_queries': ('picklefield.fields.PickledObjectField', [], {'null': 'True', 'blank': 'True'}),
             'sql_time': ('django.db.models.fields.FloatField', [], {'null': 'True', 'blank': 'True'}),
-            'test_run': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['debug_logging.TestRun']"}),
+            'test_run': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'records'", 'to': "orm['debug_logging.TestRun']"}),
             'timer_cputime': ('django.db.models.fields.FloatField', [], {'null': 'True', 'blank': 'True'}),
             'timer_ivcsw': ('django.db.models.fields.IntegerField', [], {'null': 'True', 'blank': 'True'}),
             'timer_stime': ('django.db.models.fields.FloatField', [], {'null': 'True', 'blank': 'True'}),
@@ -89,16 +53,19 @@ class Migration(SchemaMigration):
             'avg_sql_queries': ('django.db.models.fields.FloatField', [], {'null': 'True', 'blank': 'True'}),
             'avg_sql_time': ('django.db.models.fields.FloatField', [], {'null': 'True', 'blank': 'True'}),
             'avg_time': ('django.db.models.fields.FloatField', [], {'null': 'True', 'blank': 'True'}),
+            'description': ('django.db.models.fields.TextField', [], {'null': 'True', 'blank': 'True'}),
             'end': ('django.db.models.fields.DateTimeField', [], {'null': 'True', 'blank': 'True'}),
             'hostname': ('django.db.models.fields.CharField', [], {'max_length': '255', 'null': 'True', 'blank': 'True'}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'max_sql_queries': ('django.db.models.fields.IntegerField', [], {'null': 'True', 'blank': 'True'}),
+            'name': ('django.db.models.fields.CharField', [], {'max_length': '255', 'null': 'True', 'blank': 'True'}),
             'project_name': ('django.db.models.fields.CharField', [], {'max_length': '255', 'null': 'True', 'blank': 'True'}),
             'revision': ('django.db.models.fields.CharField', [], {'max_length': '40', 'null': 'True', 'blank': 'True'}),
             'start': ('django.db.models.fields.DateTimeField', [], {}),
             'total_cache_hits': ('django.db.models.fields.IntegerField', [], {'null': 'True', 'blank': 'True'}),
             'total_cache_misses': ('django.db.models.fields.IntegerField', [], {'null': 'True', 'blank': 'True'}),
             'total_cpu_time': ('django.db.models.fields.FloatField', [], {'null': 'True', 'blank': 'True'}),
+            'total_requests': ('django.db.models.fields.IntegerField', [], {'null': 'True', 'blank': 'True'}),
             'total_sql_queries': ('django.db.models.fields.IntegerField', [], {'null': 'True', 'blank': 'True'}),
             'total_sql_time': ('django.db.models.fields.FloatField', [], {'null': 'True', 'blank': 'True'}),
             'total_time': ('django.db.models.fields.FloatField', [], {'null': 'True', 'blank': 'True'})
