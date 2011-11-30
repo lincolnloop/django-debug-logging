@@ -4,6 +4,8 @@ from logging import Handler
 from django.conf import settings
 from django.utils.importlib import import_module
 
+from debug_logging.utils import import_from_string
+
 
 DEFAULT_LOGGED_SETTINGS = [
     'CACHE_BACKEND', 'CACHE_MIDDLEWARE_KEY_PREFIX', 'CACHE_MIDDLEWARE_SECONDS',
@@ -42,23 +44,7 @@ def _get_logging_config():
             if isinstance(handler, Handler):
                 handlers.append(handler())
             elif isinstance(handler, basestring):
-                i = handler.rfind('.')
-                module, attr = handler[:i], handler[i + 1:]
-                try:
-                    mod = import_module(module)
-                except ImportError, e:
-                    raise ImproperlyConfigured(
-                        'Error importing django-debug-logging handler module '
-                        '%s: "%s"' % (module, e)
-                    )
-                try:
-                    instance = getattr(mod, attr)
-                except AttributeError:
-                    raise ImproperlyConfigured(
-                        'Module "%s" does not define a "%s" handler class'
-                        % (module, attr)
-                    )
-                handlers.append(instance())
+                handlers.append(import_from_string(handler)())
         _logging_config['LOGGING_HANDLERS'] = handlers
 
         # Compile a regex for logged settings

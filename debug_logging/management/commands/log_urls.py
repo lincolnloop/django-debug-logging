@@ -5,9 +5,11 @@ from optparse import  make_option
 
 from django.test.client import Client
 from django.core.management.base import BaseCommand, CommandError
+from django.contrib.sitemaps import Sitemap
 
 from debug_logging.settings import LOGGING_CONFIG
 from debug_logging.handlers import DBHandler
+from debug_logging.utils import import_from_string
 
 
 class Command(BaseCommand):
@@ -35,8 +37,7 @@ class Command(BaseCommand):
             action='store',
             dest='sitemap',
             metavar='SITEMAP',
-            help='Load urls from single django sitemap object or dict with such \
-sitemaps. E.g. "apps.foo.urls.sitemaps"'
+            help='Load urls from a django sitemap object or dict of sitemaps.'
         ),
         make_option('-d', '--description',
             action='store',
@@ -144,41 +145,20 @@ sitemaps. E.g. "apps.foo.urls.sitemaps"'
             with open(url_list) as f:
                 urls.extend([l.strip() for l in f.readlines()
                              if not l.startswith('#')])
-        
-        if options['sitemap']:
-            if "." not in options['sitemap']:
-                options['sitemap'] += '.sitemaps'
-                
-            module_name, _, variable_name = options['sitemap'].rpartition('.')
-            
-            try:
-                module = __import__(module_name, fromlist=(variable_name))
-            except ImportError:
-                try:
-                    module = __import__("%s.%s" % (module_name, variable_name),
-                                    fromlist=("sitemaps"))
-                except:
-                    raise CommandError('Cannot import module with sitemaps \
-(we tried "%s", "%s.%s").' % (module_name, module_name, variable_name,))
 
-                variable_name = "sitemaps"
-            
-            if not hasattr(module, variable_name):
-                raise CommandError('Cannot find sitemaps in given module')
-            else:
-                sitemaps = getattr(module, variable_name)
-            
-            from django.contrib.sitemaps import Sitemap
-            if not isinstance(sitemaps, (dict, Sitemap,)):
-                raise CommandError('Sitemaps should be providen as dict \
-or Sitemap object, got %s instead' % type(sitemaps))
+        if options['sitemap']:
+            sitemaps = import_from_string(options['sitemap'])
 
             if isinstance(sitemaps, dict):
                 for sitemap in sitemaps.values():
                     urls.extend(map(sitemap.location, sitemap.items()))
-            else:
+            elif isinstance(sitemaps, Sitemap):
                 urls.extend(map(sitemaps.location, sitemaps.items()))
-
+            else:
+                raise CommandError(
+                    'Sitemaps should be a Sitemap object or a dict, got %s '
+                    'instead' % type(sitemaps)
+                )
 
         self.status_update('Beginning debug logging run...')
 
