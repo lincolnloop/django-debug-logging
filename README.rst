@@ -19,6 +19,8 @@ misses, cpu time, etc., and identify where in the app the problems are coming
 from. It is not intended as a load testing tool, so features like concurrency
 and warmup periods will not be part of the initial focus.
 
+The docs can be found on `Read the Docs`_
+
 Screenshots
 -----------
 
@@ -67,5 +69,4 @@ development:
   same run together, showing aggregated and individual stats.
 
 .. _Django Debug Toolbar: https://github.com/django-debug-toolbar/django-debug-toolbar
-
-.. _Picklefield: https://github.com/gintas/django-picklefield
+.. _Read the Docs: http://readthedocs.org/projects/django-debug-logging/
