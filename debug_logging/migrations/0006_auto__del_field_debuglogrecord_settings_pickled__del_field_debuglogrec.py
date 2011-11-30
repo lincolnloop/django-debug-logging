@@ -8,48 +8,12 @@ class Migration(SchemaMigration):
 
     def forwards(self, orm):
         
-        # Deleting field 'DebugLogRecord.settings_pickled'
-        db.delete_column('debug_logging_debuglogrecord', 'settings_pickled')
-
-        # Deleting field 'DebugLogRecord.cache_calls_pickled'
-        db.delete_column('debug_logging_debuglogrecord', 'cache_calls_pickled')
-
-        # Deleting field 'DebugLogRecord.sql_queries_pickled'
-        db.delete_column('debug_logging_debuglogrecord', 'sql_queries_pickled')
-
-        # Adding field 'DebugLogRecord.settings'
-        db.add_column('debug_logging_debuglogrecord', 'settings', self.gf('picklefield.fields.PickledObjectField')(null=True, blank=True), keep_default=False)
-
-        # Adding field 'DebugLogRecord.sql_queries'
-        db.add_column('debug_logging_debuglogrecord', 'sql_queries', self.gf('picklefield.fields.PickledObjectField')(null=True, blank=True), keep_default=False)
-
-        # Adding field 'DebugLogRecord.cache_calls'
-        db.add_column('debug_logging_debuglogrecord', 'cache_calls', self.gf('picklefield.fields.PickledObjectField')(null=True, blank=True), keep_default=False)
-
         # Changing field 'TestRun.end'
         db.alter_column('debug_logging_testrun', 'end', self.gf('django.db.models.fields.DateTimeField')(null=True))
 
 
     def backwards(self, orm):
         
-        # Adding field 'DebugLogRecord.settings_pickled'
-        db.add_column('debug_logging_debuglogrecord', 'settings_pickled', self.gf('django.db.models.fields.TextField')(null=True, blank=True), keep_default=False)
-
-        # Adding field 'DebugLogRecord.cache_calls_pickled'
-        db.add_column('debug_logging_debuglogrecord', 'cache_calls_pickled', self.gf('django.db.models.fields.TextField')(null=True, blank=True), keep_default=False)
-
-        # Adding field 'DebugLogRecord.sql_queries_pickled'
-        db.add_column('debug_logging_debuglogrecord', 'sql_queries_pickled', self.gf('django.db.models.fields.TextField')(null=True, blank=True), keep_default=False)
-
-        # Deleting field 'DebugLogRecord.settings'
-        db.delete_column('debug_logging_debuglogrecord', 'settings')
-
-        # Deleting field 'DebugLogRecord.sql_queries'
-        db.delete_column('debug_logging_debuglogrecord', 'sql_queries')
-
-        # Deleting field 'DebugLogRecord.cache_calls'
-        db.delete_column('debug_logging_debuglogrecord', 'cache_calls')
-
         # User chose to not deal with backwards NULL issues for 'TestRun.end'
         raise RuntimeError("Cannot reverse this migration. 'TestRun.end' and its values cannot be restored.")
 
