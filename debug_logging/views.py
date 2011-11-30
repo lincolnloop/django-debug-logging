@@ -1,6 +1,6 @@
 from django.core.paginator import Paginator
 
-from django.shortcuts import get_object_or_404, render_to_response
+from django.shortcuts import get_object_or_404, render_to_response, redirect
 from django.template import RequestContext
 
 from debug_logging.models import DebugLogRecord, TestRun
@@ -17,6 +17,13 @@ def index(request):
         'all_test_runs': _get_all_test_runs(),
     }, context_instance=RequestContext(request))
 
+def delete_runs(request):
+    if request.method == "POST":
+        runs = map(int, request.POST.getlist("run_id"))
+        
+        TestRun.objects.filter(pk__in = runs).delete()
+
+    return redirect("debug_logging_index")
 
 def run_detail(request, run_id):
     test_run = get_object_or_404(TestRun, id=run_id)

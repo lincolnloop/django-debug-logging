@@ -5,9 +5,11 @@ from optparse import  make_option
 
 from django.test.client import Client
 from django.core.management.base import BaseCommand, CommandError
+from django.contrib.sitemaps import Sitemap
 
 from debug_logging.settings import LOGGING_CONFIG
 from debug_logging.handlers import DBHandler
+from debug_logging.utils import import_from_string
 
 
 class Command(BaseCommand):
@@ -30,6 +32,12 @@ class Command(BaseCommand):
             dest='name',
             metavar='NAME',
             help='Add a name to the test run.'
+        ),
+        make_option('', '--sitemap',
+            action='store',
+            dest='sitemap',
+            metavar='SITEMAP',
+            help='Load urls from a django sitemap object or dict of sitemaps.'
         ),
         make_option('-d', '--description',
             action='store',
@@ -137,6 +145,20 @@ class Command(BaseCommand):
             with open(url_list) as f:
                 urls.extend([l.strip() for l in f.readlines()
                              if not l.startswith('#')])
+
+        if options['sitemap']:
+            sitemaps = import_from_string(options['sitemap'])
+
+            if isinstance(sitemaps, dict):
+                for sitemap in sitemaps.values():
+                    urls.extend(map(sitemap.location, sitemap.items()))
+            elif isinstance(sitemaps, Sitemap):
+                urls.extend(map(sitemaps.location, sitemaps.items()))
+            else:
+                raise CommandError(
+                    'Sitemaps should be a Sitemap object or a dict, got %s '
+                    'instead' % type(sitemaps)
+                )
 
         self.status_update('Beginning debug logging run...')
 
