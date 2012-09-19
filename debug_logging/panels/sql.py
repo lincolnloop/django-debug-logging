@@ -1,38 +1,9 @@
 from debug_toolbar.panels.sql import SQLDebugPanel
 
-# This whole block is to support the workaround below on the __init__ method,
-# and can be deleted once #178 on django-debug-toolbar is closed.
-try:
-    from django.db import connections
-except ImportError:
-    # Compatibility with Django < 1.2
-    from django.db import connection
-    connections = {'default': connection}
-    connection.alias = 'default'
-
 
 class SQLLoggingPanel(SQLDebugPanel):
     """Extends the SQL debug panel to enable logging."""
-
-    def __init__(self, *args, **kwargs):
-        """
-        This method is copied & pasted from SQLDebugPanel to overcome the issue
-        described here:
-
-        https://github.com/django-debug-toolbar/django-debug-toolbar/pull/178
-
-        Once this issue is closed and the pull request is merged, this __init__
-        method can be entirely removed.
-        """
-        self.context.update(kwargs.get('context', {}))
-        self._offset = dict((k, len(connections[k].queries)) for k in connections)
-        self._sql_time = 0
-        self._num_queries = 0
-        self._queries = []
-        self._databases = {}
-        self._transaction_status = {}
-        self._transaction_ids = {}
-
+    
     def process_response(self, request, response):
         if getattr(request, 'debug_logging', {}).get('ENABLED', False):
             # Call the nav_subtitle method so that the query data is captured
