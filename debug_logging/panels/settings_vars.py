@@ -6,6 +6,7 @@ class SettingsVarsLoggingPanel(SettingsVarsDebugPanel):
     """Extends the Settings debug panel to enable logging."""
 
     def process_response(self, request, response):
+        super(SettingsVarsLoggingPanel, self).process_response(request, response)
         if getattr(request, 'debug_logging', {}).get('ENABLED', False):
             # Logging is enabled, so log the settings
 

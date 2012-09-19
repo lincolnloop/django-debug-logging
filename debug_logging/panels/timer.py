@@ -19,8 +19,7 @@ class TimerLoggingPanel(TimerDebugPanel):
         return utime, stime, vcsw, ivcsw, minflt, majflt
 
     def process_response(self, request, response):
-        response = super(TimerLoggingPanel, self).process_response(
-            request, response)
+        super(TimerLoggingPanel, self).process_response(request, response)
 
         if getattr(request, 'debug_logging', {}).get('ENABLED', False):
             utime, stime, vcsw, ivcsw, minflt, majflt = self.get_stats()
@@ -33,5 +32,3 @@ class TimerLoggingPanel(TimerDebugPanel):
                 'timer_ivcsw': ivcsw,
             }
             request.debug_logging_stats.update(stats)
-
-        return response

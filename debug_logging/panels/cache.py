@@ -5,8 +5,9 @@ from debug_logging.settings import LOGGING_CONFIG
 
 class CacheLoggingPanel(CacheDebugPanel):
     """Extends the Cache debug panel to enable logging."""
-    
+
     def process_response(self, request, response):
+        super(CacheLoggingPanel, self).process_response(request, response)
         if getattr(request, 'debug_logging', {}).get('ENABLED', False):
             # Logging is enabled, so log the cache data
 
